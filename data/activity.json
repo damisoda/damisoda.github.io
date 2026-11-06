@@ -4,9 +4,18 @@
     "title": "서강대학교 경영데이터사이언스학회 INSIGHT",
     "period": "2026.03–현재",
     "periodNote": "2026.12 종료 예정",
-    "result": "15기 · 교육팀",
-    "description": "데이터 분석·ML/DL 정규세션과 교육팀 활동. 학회 프로젝트 Dev-Hive 팀 리드로 콘텐츠 처리·추천 파이프라인과 팀 협업을 진행했습니다.",
-    "links": [["공식 회원 명단", "https://insight.oopy.io/ecbeedca-f6b1-40aa-b6e4-990ab94179e1"], ["학회 프로젝트 소개", "https://insight.oopy.io/8a312ab9-7d49-49c3-95e2-bf2ad786af2c"]]
+    "result": "15기 · Dev-Hive 팀 리드",
+    "description": "데이터 분석·ML/DL을 공부하며 프로젝트와 세션 활동에 참여하고 있습니다. Dev-Hive에서는 그래프(Layer 2)와 서비스 영역을 맡았습니다.",
+    "links": [
+      [
+        "공식 회원 명단",
+        "https://insight.oopy.io/ecbeedca-f6b1-40aa-b6e4-990ab94179e1"
+      ],
+      [
+        "학회 프로젝트 소개",
+        "https://insight.oopy.io/8a312ab9-7d49-49c3-95e2-bf2ad786af2c"
+      ]
+    ]
   },
   {
     "type": "수상",
@@ -14,8 +23,17 @@
     "period": "2026.07",
     "periodNote": "",
     "result": "우수상",
-    "description": "팀 짱사이트의 커리어 저금통으로 참여했습니다. 긱워커의 커리어·예산·은퇴 준비를 연결하는 AI 생활금융 서비스를 구현했습니다.",
-    "links": [["학회 수상 기록", "https://insight.oopy.io/a87f8c6b-2a84-4478-9c67-626820a4ec29"], ["프로젝트 저장소", "https://github.com/Geek-Sogang/Career-Piggybank"]]
+    "description": "팀 짱사이트의 커리어 저금통으로 우수상을 받았습니다. 앱 사용자 흐름과 로컬 모델 사용 조건을 정하고 AI와 함께 UI·데모 경험을 개선했습니다.",
+    "links": [
+      [
+        "학회 수상 기록",
+        "https://insight.oopy.io/a87f8c6b-2a84-4478-9c67-626820a4ec29"
+      ],
+      [
+        "프로젝트 저장소",
+        "https://github.com/Geek-Sogang/Career-Piggybank"
+      ]
+    ]
   },
   {
     "type": "경진대회",
@@ -23,17 +41,31 @@
     "period": "2026",
     "periodNote": "활동 종료",
     "result": "1차 결선 진출",
-    "description": "팀 동행의 실종자 수색 지원 서비스로 국내 AI 트랙에 참여했습니다. 최종 성과는 1차 결선 진출이며, 최종 결선에는 진출하지 않았습니다.",
-    "links": [["프로젝트 저장소", "https://github.com/Donghaeng-AI-ROOKIE/Come-back-home"], ["대회 공식 사이트", "https://ai-rookie.or.kr/"]]
+    "description": "팀 동행의 실종자 수색 지원 서비스로 참여했습니다. 1차 결선에 진출했으며, 2차 결선에는 진출하지 못하고 대회 활동을 마쳤습니다.",
+    "links": [
+      [
+        "프로젝트 저장소",
+        "https://github.com/Donghaeng-AI-ROOKIE/Come-back-home"
+      ],
+      [
+        "대회 공식 사이트",
+        "https://ai-rookie.or.kr/"
+      ]
+    ]
   },
   {
     "type": "인턴십",
     "title": "멋사 로켓단 · LearnCraft",
     "period": "2026.03–04",
     "periodNote": "",
-    "result": "퀴즈 생성 파이프라인",
-    "description": "강의 스크립트 기반 퀴즈 생성, 난이도 선택, 코드 완성형 퀴즈와 자동 채점 구현에 참여했습니다.",
-    "links": [["프로젝트 저장소", "https://github.com/damisoda/LearnCraft-quiz_generator"]]
+    "result": "LearnCraft 프로젝트",
+    "description": "강의 스크립트 기반 퀴즈 생성과 자동 채점을 다룬 LearnCraft 프로젝트의 인턴십 경험입니다.",
+    "links": [
+      [
+        "프로젝트 저장소",
+        "https://github.com/damisoda/LearnCraft-quiz_generator"
+      ]
+    ]
   },
   {
     "type": "교육",
@@ -42,6 +74,15 @@
     "periodNote": "",
     "result": "NLP·팀 프로젝트",
     "description": "한국어 텍스트 복원과 생성형 에이전트 시뮬레이션을 다루며 NLP·AI 프로젝트 경험을 쌓았습니다.",
-    "links": [["텍스트 복원 프로젝트", "https://github.com/damisoda/text-recovery"], ["에이전트 시뮬레이터", "https://github.com/damisoda/LOVELOP-commercial-agent-simulator"]]
+    "links": [
+      [
+        "텍스트 복원 프로젝트",
+        "https://github.com/damisoda/text-recovery"
+      ],
+      [
+        "에이전트 시뮬레이터",
+        "https://github.com/damisoda/LOVELOP-commercial-agent-simulator"
+      ]
+    ]
   }
 ]
