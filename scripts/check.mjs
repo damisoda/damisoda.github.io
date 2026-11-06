@@ -18,5 +18,21 @@ for(const file of files){
 }
 const cbh=readFileSync(join(root,'projects/come-back-home/index.html'),'utf8');
 if(!cbh.includes('1차 결선 진출'))errors.push('Competition result missing');
+for(const project of projects){
+ for(const screen of project.screens??[]){
+  if(!existsSync(join(root,'assets',screen.image)))errors.push(`${project.slug}: missing product screen ${screen.image}`);
+ }
+ if(project.demoUrl){
+  const demoDir=join(root,project.demoUrl);
+  const html=readFileSync(join(demoDir,'index.html'),'utf8');
+  for(const [,src] of html.matchAll(/<script[^>]+src="([^"]+)"/g)){
+   if(src.startsWith('/')&&!existsSync(join(root,src)))errors.push(`${project.slug}: missing demo bundle ${src}`);
+  }
+  const source=JSON.parse(readFileSync(join(demoDir,'source.json'),'utf8'));
+  if(source.mode!=='EXPO_PUBLIC_DEMO=1')errors.push(`${project.slug}: expected fixture demo mode`);
+  if(!html.includes('예제 데이터 · 화면 체험'))errors.push(`${project.slug}: demo label missing`);
+  if(!existsSync(join(root,'.nojekyll')))errors.push('Missing .nojekyll for Expo assets');
+ }
+}
 if(errors.length){console.error(errors.join('\n'));process.exit(1);}
-console.log(`Checked ${files.length} pages: local links/assets, metadata, headings and competition result.`);
+console.log(`Checked ${files.length} pages, product screens and demo bundles: links/assets, metadata, headings and competition result.`);

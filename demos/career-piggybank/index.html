@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>커리어 저금통 · 예제 데이터 체험 데모</title>
+    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
+    <style id="expo-reset">
+      /* These styles make the body full-height */
+      html,
+      body {
+        height: 100%;
+      }
+      /* These styles disable body scrolling if you are using <ScrollView> */
+      body {
+        overflow: hidden;
+      }
+      /* These styles make the root element full-height */
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
+    </style>
+    <style id="phone-frame">
+html, body { height: 100%; margin: 0; }
+body { background:#0e1013; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+#root {
+  flex: none !important;
+  width: auto;
+  height: min(860px, calc(100dvh - 24px));
+  aspect-ratio: 390 / 844;
+  max-width: calc(100vw - 24px);
+  background:#F7F8FA;
+  border-radius: 46px;
+  overflow: hidden;
+  box-shadow: 0 0 0 10px #111318, 0 0 0 12px #2b2e35, 0 26px 80px rgba(0,0,0,.6);
+}
+@media (max-width: 520px) {
+  body { background:#F7F8FA; }
+  #root { width:100%; height:100dvh; aspect-ratio:auto; max-width:none; border-radius:0; box-shadow:none; }
+}</style>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="description" content="커리어 저금통 기존 앱의 화면 체험 데모. 예제 데이터로 커리어·봉투·미션·미래 흐름을 살펴봅니다."><style>.demo-ribbon{position:fixed;top:0;left:0;right:0;height:34px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 14px;z-index:10000;background:#173f3e;color:#fff;font:12px/1.4 -apple-system,sans-serif}.demo-ribbon a{color:#fff;text-decoration:underline;white-space:nowrap}body{box-sizing:border-box;padding-top:34px}#root{height:min(860px,calc(100dvh - 72px))}@media(max-width:520px){#root{height:calc(100dvh - 34px)}}</style></head>
+
+  <body><aside class="demo-ribbon"><span>예제 데이터 · 화면 체험</span><a href="/projects/career-piggybank/#demo">포트폴리오로</a></aside>
+    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <!-- The root element for your Expo app. -->
+    <div id="root"></div>
+  <script src="/demos/career-piggybank/_expo/static/js/web/entry-b16655af5b5c73ab05c35fb91a8d7421.js" defer></script>
+</body>
+</html>

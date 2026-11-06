@@ -41,3 +41,19 @@ document.querySelector('.copy-email')?.addEventListener('click', async event => 
     status.textContent = '위 이메일 주소를 선택해 복사하거나 클릭해 메일을 보내주세요.';
   }
 });
+
+document.querySelectorAll('[data-product-tour]').forEach(tour => {
+  tour.querySelectorAll('[data-tour-image-src]').forEach(button => {
+    button.addEventListener('click', () => {
+      const image = tour.querySelector('[data-tour-image]');
+      image.src = button.dataset.tourImageSrc;
+      image.alt = `${button.dataset.tourTitle} · 기존 앱의 예제 데이터 화면`;
+      tour.querySelector('.tour-description [data-tour-title]').textContent = button.dataset.tourTitle;
+      tour.querySelector('.tour-description [data-tour-description]').textContent = button.dataset.tourDescription;
+      tour.querySelector('[data-tour-caption]').textContent = `${button.dataset.tourLabel} · 실제 앱 데모 화면`;
+      tour.querySelectorAll('[data-tour-image-src]').forEach(other => {
+        other.setAttribute('aria-pressed', String(other === button));
+      });
+    });
+  });
+});

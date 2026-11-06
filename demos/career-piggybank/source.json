@@ -1,0 +1,7 @@
+{
+  "repository": "https://github.com/Geek-Sogang/Career-Piggybank",
+  "commit": "f5876bd654fb02da48adcdcca2695f742ab0a56b",
+  "mode": "EXPO_PUBLIC_DEMO=1",
+  "baseUrl": "/demos/career-piggybank",
+  "description": "Existing Expo application compiled with repository demo fixtures. No live API or model calls. Portfolio notice and phone frame added."
+}
