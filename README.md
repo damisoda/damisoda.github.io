@@ -31,6 +31,6 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 `demos/career-piggybank/`는 기존 Expo 앱을 `EXPO_PUBLIC_DEMO=1`로 내보낸 정적 산출물입니다. 원본 저장소의 데모 픽스처를 그대로 사용하며, 이력 확인·봉투 제안·커리어·미션·미래 화면을 체험할 수 있습니다. 실제 금융기관 연결, 거래 또는 모델 추론은 실행하지 않습니다. 원본과 빌드 설정은 해당 폴더의 `source.json`에 기록했습니다.
 
-재생성 시 원본 저장소의 `apps/mobile`에서 의존성을 준비하고 `app.json`의 `expo.experiments.baseUrl`을 `/demos/career-piggybank`로 설정한 다음 `EXPO_PUBLIC_DEMO=1 npx expo export --platform web`로 내보냅니다. 산출물에 원본의 `scripts/inject-phone-frame.mjs`를 적용하고, 포트폴리오의 데모 안내·돌아가기 링크를 유지합니다. 일반 포트폴리오 빌드는 이 데모를 다시 빌드하지 않습니다. `.nojekyll`은 Expo의 `_expo` 파일을 Pages에서 제공하는 데 필요합니다.
+재생성 시 원본 저장소의 `apps/mobile`에서 의존성을 준비하고 `app.json`의 `expo.experiments.baseUrl`을 `/demos/career-piggybank`로 설정한 다음 `EXPO_PUBLIC_DEMO=1 npx expo export --platform web`로 내보냅니다. 산출물에 원본의 `scripts/inject-phone-frame.mjs`를 적용하고, 포트폴리오의 데모 안내·돌아가기 링크를 유지합니다. 다른 체크아웃의 의존성을 연결해 내보냈다면 `node scripts/prepare-piggy-demo.mjs`로 에셋 경로를 정규화합니다. 일반 포트폴리오 빌드는 이 데모를 다시 빌드하지 않습니다. `.nojekyll`은 Expo의 `_expo` 파일을 Pages에서 제공하는 데 필요합니다.
 
 Dev-Hive 대표 화면은 기존 Next.js 프런트를 저장소 예제 데이터로 로컬 실행한 캡처입니다. 지식그래프는 상세 페이지의 별도 펼침 영역에 남겼습니다.

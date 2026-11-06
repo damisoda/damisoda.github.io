@@ -26,7 +26,14 @@ for(const project of projects){
   const demoDir=join(root,project.demoUrl);
   const html=readFileSync(join(demoDir,'index.html'),'utf8');
   for(const [,src] of html.matchAll(/<script[^>]+src="([^"]+)"/g)){
-   if(src.startsWith('/')&&!existsSync(join(root,src)))errors.push(`${project.slug}: missing demo bundle ${src}`);
+   if(!src.startsWith('/'))continue;
+   const file=join(root,src);
+   if(!existsSync(file)){errors.push(`${project.slug}: missing demo bundle ${src}`);continue;}
+   const bundle=readFileSync(file,'utf8');
+   if(bundle.includes('Users/'))errors.push(`${project.slug}: non-portable dependency asset path`);
+   for(const [,asset] of bundle.matchAll(/uri:"(\/demos\/career-piggybank\/assets\/[^"?#]+)"/g)){
+    if(!existsSync(join(root,asset)))errors.push(`${project.slug}: missing demo asset ${asset}`);
+   }
   }
   const source=JSON.parse(readFileSync(join(demoDir,'source.json'),'utf8'));
   if(source.mode!=='EXPO_PUBLIC_DEMO=1')errors.push(`${project.slug}: expected fixture demo mode`);
