@@ -51,7 +51,7 @@ function supplement(p) {
 }
 
 function card(p) {
- return `<article class="project-card" data-project="${esc(p.slug)}" data-category="${esc(p.category)}"><a class="visual-link" href="/projects/${esc(p.slug)}/" aria-label="${esc(p.title)} 프로젝트 자세히 보기">${imagePanel(p)}</a><div class="project-copy"><div class="project-meta"><span>${esc(p.category)}</span><span>${esc(p.kind)}</span><span>${esc(p.period)}</span></div><h3><a href="/projects/${esc(p.slug)}/">${esc(p.title)}${arrow}</a></h3><p>${esc(p.summary)}</p>${tags(p)}<div class="project-proof">${esc(p.highlight)}</div><div class="card-links"><a class="text-link" href="/projects/${esc(p.slug)}/">프로젝트 보기${arrow}</a>${p.demoUrl?external(p.demoUrl,'데모 체험'): ''}</div></div></article>`;
+ return `<article class="project-card" data-project="${esc(p.slug)}" data-category="${esc(p.category)}"><a class="visual-link" href="/projects/${esc(p.slug)}/" aria-label="${esc(p.title)} 프로젝트 자세히 보기">${imagePanel(p)}</a><div class="project-copy"><div class="project-meta"><span>${esc(p.category)}</span><span>${esc(p.kind)}</span><span>${esc(p.period)}</span></div><h3><a href="/projects/${esc(p.slug)}/">${esc(p.title)}${arrow}</a></h3><p>${esc(p.summary)}</p>${p.aiRole?`<p class="ai-role"><strong>AI가 맡은 일</strong> ${esc(p.aiRole)}</p>`:''}${tags(p)}<div class="project-proof">${esc(p.highlight)}</div><div class="card-links"><a class="text-link" href="/projects/${esc(p.slug)}/">프로젝트 보기${arrow}</a>${p.demoUrl?external(p.demoUrl,'데모 체험'): ''}</div></div></article>`;
 }
 
 function frame(title, description, path, content) {
