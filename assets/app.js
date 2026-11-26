@@ -1,4 +1,5 @@
 const doc = document.documentElement;
+doc.classList.add('js');
 const themeButton = document.querySelector('.theme-toggle');
 function updateThemeLabel() {
   themeButton?.setAttribute('aria-label', doc.dataset.theme === 'dark' ? '밝은 테마로 전환' : '어두운 테마로 전환');
@@ -47,10 +48,10 @@ document.querySelectorAll('[data-product-tour]').forEach(tour => {
     button.addEventListener('click', () => {
       const image = tour.querySelector('[data-tour-image]');
       image.src = button.dataset.tourImageSrc;
-      image.alt = `${button.dataset.tourTitle} · 기존 앱의 예제 데이터 화면`;
+      image.alt = `${button.dataset.tourTitle}, 기존 앱의 예제 데이터 화면`;
       tour.querySelector('.tour-description [data-tour-title]').textContent = button.dataset.tourTitle;
       tour.querySelector('.tour-description [data-tour-description]').textContent = button.dataset.tourDescription;
-      tour.querySelector('[data-tour-caption]').textContent = `${button.dataset.tourLabel} · 실제 앱 데모 화면`;
+      tour.querySelector('[data-tour-caption]').textContent = `${button.dataset.tourLabel}, 실제 앱 데모 화면`;
       tour.querySelectorAll('[data-tour-image-src]').forEach(other => {
         other.setAttribute('aria-pressed', String(other === button));
       });

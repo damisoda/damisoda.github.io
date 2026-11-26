@@ -4,10 +4,10 @@ GitHub Pages에서 제공하는 정적 포트폴리오입니다. 프로젝트의
 
 ## 수정
 
-- 대표 프로젝트와 검증 기록: `data/projects.json`
+- 웹 포트폴리오 본문과 검증 사례: `data/portfolio-dora.mjs`, `data/portfolio-hive.mjs`, `data/portfolio-piggy.mjs`
 - 공개 문서: `portfolio.pdf`, `resume.pdf`
-- 페이지 템플릿: `scripts/build.mjs`
-- 스타일·상호작용: `assets/style.css`, `assets/app.js`
+- 페이지 템플릿: `scripts/portfolio.mjs`, 빌드 진입점: `scripts/build.mjs`
+- 웹 포트폴리오 스타일과 상호작용: `assets/portfolio.css`, `assets/app.js`
 - 이미지: `assets/` — 기존 프로젝트를 실행해 캡처한 화면·시각화·캐릭터
 
 빌드에는 Node.js가 필요하며 외부 패키지는 설치하지 않습니다.
@@ -20,7 +20,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 `http://127.0.0.1:8765`에서 확인합니다. 생성되는 `index.html`과 프로젝트별 `index.html`은 템플릿을 수정한 뒤 다시 빌드합니다. 기존 `/projects/come-back-home/`, `/projects/career-piggybank/`, `/projects/dev-hive/` 주소를 유지합니다.
 
-분류 필터, 테마 전환, 모바일 메뉴, 이메일 복사와 앱 화면 선택을 지원합니다. 커리어 저금통은 예제 데이터로 실행하는 체험 데모도 제공합니다. 실제 금융기관 API나 모델 서버에는 연결하지 않습니다.
+프로젝트 목차, 모바일 메뉴, 이메일 복사와 앱 화면 선택을 지원합니다. 커리어 저금통은 예제 데이터로 실행하는 체험 데모도 제공합니다. 실제 금융기관 API나 모델 서버에는 연결하지 않습니다.
 
 ## 게시
 
