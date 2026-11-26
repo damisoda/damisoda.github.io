@@ -1,134 +1,20 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#ffffff">
-<title>Dev-Hive, 조대흠 포트폴리오</title><meta name="description" content="흩어진 AI 활용 사례를 주제와 선행관계로 묶어 학습자가 다음에 읽을 글을 추천합니다.">
-<link rel="canonical" href="https://damisoda.github.io/projects/dev-hive/"><meta property="og:title" content="Dev-Hive, 조대흠 포트폴리오">
-<meta property="og:description" content="흩어진 AI 활용 사례를 주제와 선행관계로 묶어 학습자가 다음에 읽을 글을 추천합니다."><meta property="og:type" content="website">
-<meta property="og:url" content="https://damisoda.github.io/projects/dev-hive/"><meta name="twitter:card" content="summary">
-<link rel="icon" href="/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/portfolio.css?v=57d57bbb050c">
-<script src="/assets/app.js?v=57d57bbb050c" defer></script>
-</head><body><a class="skip-link" href="#main">본문 바로가기</a>
-  <header class="site-header"><div class="shell mast">
-    <a class="brand" href="/"><strong>조대흠</strong><span>AI Engineer</span></a>
-    <button type="button" class="menu-toggle" aria-controls="navigation" aria-expanded="false">메뉴</button>
-    <nav id="navigation" aria-label="주요 메뉴">
-      <a href="/#work">대표 프로젝트</a><a href="/#activity">경력</a><a href="/#skills">역량</a><a href="/#projects">다른 프로젝트</a><a href="/#contact">연락</a>
-      <a class="nav-resume" href="/resume.pdf">이력서 PDF</a>
-    </nav>
-  </div></header><main id="main">
-    <section class="case-hero" aria-labelledby="case-title"><div class="shell case-hero-inner">
-      <div><a class="case-back" href="/#work">대표 프로젝트로</a>
-        <h1 id="case-title">Dev-Hive</h1><p class="case-lede">흩어진 AI 활용 사례를 주제와 선행관계로 묶어 학습자가 다음에 읽을 글을 추천합니다.</p>
-        <ul class="links"><li><a href="https://github.com/damisoda/Dev-Hive">프로젝트 코드</a></li><li><a href="https://github.com/damisoda/Dev-Hive/blob/main/docs/%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8.md">파이프라인 설계 문서</a></li><li><a href="https://github.com/damisoda/Dev-Hive/blob/main/deploy/macmini/README.md">맥미니 배포 문서</a></li><li><a href="https://insight.oopy.io/8a312ab9-7d49-49c3-95e2-bf2ad786af2c">학회 프로젝트 소개</a></li></ul>
-      </div>
-      <dl class="case-meta"><div><dt>팀과 역할</dt><dd>서강대학교 INSIGHT 학회, 4인, 팀 리드</dd></div>
-        <div><dt>기간</dt><dd>2026.05 - 2026.06</dd></div>
-        <div><dt>프로젝트 기록</dt><dd>서강대학교 INSIGHT 학회 프로젝트</dd></div>
-      </dl>
-    </div></section>
-    <div class="shell reading">
-      <aside class="case-index" aria-label="프로젝트 목차"><h2>목차</h2>
-        <ul class="links"><li><a href="#problem">개요</a></li><li><a href="#architecture">전체 구조</a></li><li><a href="#two-pass">2패스 주제 편입</a></li><li><a href="#threshold">노드별 동적 임계값</a></li><li><a href="#prerequisites">선행관계 기반 추천</a></li></ul>
-      </aside>
-      <div class="case-content">
-        <section class="chapter overview" id="problem" aria-labelledby="overview-title">
-          <h2 id="overview-title">서비스 개요</h2>
-          <div class="analysis-grid"><div><h3>문제 정의</h3><p>GitHub와 커뮤니티에는 AI 활용 사례가 빠르게 쌓입니다. Codex 자동화 글을 북마크해도 처음 쓰는 사람은 글 속 설정을 바로 따라 해도 되는지, 기본 사용법을 먼저 익혀야 하는지 판단하기 어렵습니다. 글을 읽은 뒤 다음에 볼 자료도 다시 찾아야 합니다. Dev-Hive는 흩어진 자료를 학습자가 지금 볼 수 있는 순서로 묶는 데서 출발했습니다.</p></div>
-          <div><h3>구현 방향</h3><p>여섯 소스에서 수집한 자료와 사용자가 올린 글에 LLM으로 주제와 난이도를 붙였습니다. 기존 주제와 가까운 글을 먼저 편입하고 남은 글을 묶어 새 주제를 만들었습니다. 추천 코드는 주제 간 선행관계, 학습자의 관심과 숙련도, 자료 난이도를 반영해 순위를 매깁니다. 읽은 뒤 남긴 피드백은 다음 추천에 쓰는 학습 상태를 갱신합니다.</p></div></div>
-          <div class="role-note" id="contribution"><h3>내가 맡은 일</h3><p>수집부터 지식그래프 구성과 추천까지 전체 흐름을 설계했습니다. 2패스 편입과 노드별 동적 임계값을 설계하고 구현했고, 하위 주제의 선행관계를 추천에 연결했습니다. 서비스 통합과 PR 리뷰도 맡았습니다.</p></div>
-          <p class="minor">Python, FastAPI, PostgreSQL, pgvector, EXAONE, GraphRAG, Next.js</p>
-        </section>
-        <section class="chapter" id="architecture" aria-labelledby="architecture-title">
-          <h2 id="architecture-title">전체 아키텍처</h2>
-          <h3>자료가 추천 후보가 되기까지</h3><ol class="flow" aria-label="자료가 추천 후보가 되기까지">
-  <li><strong>자료 수집</strong><span>여섯 소스와 사용자 업로드</span></li><li><strong>품질 검사와 태깅</strong><span>LLM으로 주제와 난이도 추출</span></li><li><strong>임베딩과 Auto-HKG</strong><span>기존 주제에 편입하고 잔여 글은 군집화</span></li><li><strong>주제와 선행관계 저장</strong><span>PostgreSQL, pgvector</span></li><li><strong>추천 후보 검색</strong><span>그래프 경로와 벡터로 검색</span></li>
-  </ol><h3>추천 순위와 학습 상태 갱신</h3><ol class="flow" aria-label="추천 순위와 학습 상태 갱신">
-  <li><strong>학습자 상태 읽기</strong><span>관심사, 숙련도, 읽은 이력</span></li><li><strong>추천 순위 계산</strong><span>난이도, 관련성, 선행 충족도, 다양성</span></li><li><strong>추천 이유 제공</strong><span>LLM으로 1순위 이유 작성, 실패 시 템플릿 사용</span></li><li><strong>피드백으로 상태 갱신</strong><span>이해, 어려움, 더 보기, 관심 없음을 규칙으로 반영</span></li>
-  </ol>
-        </section>
-        <div id="solving">
-          <div id="decisions"><section class="chapter" id="two-pass" aria-labelledby="two-pass-title">
-    <h2 id="two-pass-title">기존 주제부터 편입해 자동 생성 주제를 825개에서 24개로 줄였습니다</h2>
-    <p class="chapter-role"><strong>내가 맡은 일</strong> Auto-HKG 설계, 주제 파편화 진단, 2패스 구조 구현과 DB 재구축</p>
-    <div class="analysis-grid"><div><h3>관찰과 원인</h3><p>당시 편입 임계값 0.85는 관찰한 최대 유사도 0.816보다 높았습니다. 콘텐츠가 기존 주제에 들어가기 어려워 자동 생성 주제 825개 중 778개가 글 한 건짜리였습니다. 새로 생긴 주제도 다음 글의 편입 후보가 되어, 어떤 글부터 들어오느냐에 따라 기준이 달라졌습니다.</p></div>
-    <div><h3>구현과 선택 이유</h3><p>첫 단계의 후보를 기존 비자동 주제로 고정했습니다. 코사인 유사도 0.70 이상이면 해당 주제에 편입하고, 남은 글은 서로의 유사도가 0.65 이상인 연결을 따라 묶었습니다. 글이 3건 이상인 군집만 새 주제로 만들고 작은 군집은 가까운 주제에 편입했습니다. LLM에는 군집의 이름과 설명을 붙이는 일만 맡겼습니다.</p></div></div>
-    <ol class="flow" aria-label="구현 흐름">
-  <li><strong>1패스, 기존 주제 편입</strong><span>비자동 주제, 코사인 유사도 0.70 이상</span></li><li><strong>2패스, 남은 글 군집화</strong><span>유사도 0.65 이상인 연결, 군집 크기 3건 이상</span></li><li><strong>주제 이름 생성</strong><span>LLM에 군집 이름과 설명만 요청</span></li>
-  </ol>
-
-    <figure class="comparison"><figcaption>콘텐츠 924건 재구축에서 자동 생성된 주제 수</figcaption>
-    <ul><li><span>변경 전</span><meter min="0" max="924" value="825" aria-label="변경 전"></meter><strong>825개</strong></li><li><span>2패스 적용 후</span><meter min="0" max="924" value="24" aria-label="2패스 적용 후"></meter><strong>24개</strong></li></ul>
-  </figure>
-    <h3>검증 결과</h3>
-    <div class="table-scroll"><table>
-
-  <thead><tr><th scope="col">콘텐츠 924건 DB 재구축</th><th scope="col">기존</th><th scope="col">2패스 적용 후</th></tr></thead>
-  <tbody><tr><th scope="row">글 한 건짜리 자동 주제 비율</th><td>94.3%</td><td>0%</td></tr><tr><th scope="row">자동 생성 주제</th><td>825개</td><td>24개</td></tr><tr><th scope="row">LLM 호출</th><td>924회</td><td>24회</td></tr></tbody>
-  </table></div>
-
-
-    <p class="scope"><strong>평가 범위</strong> 콘텐츠 924건으로 DB를 재구축했습니다. 먼저 트랜잭션을 롤백하는 방식으로 검증한 뒤 적용했습니다. 연결요소 방식에서 최대 110건의 큰 군집이 남아 후속 분할 대상으로 기록했습니다. 다음의 902건 시간순 유입 실험은 데이터와 비교 조건이 다릅니다.</p>
-    <ul class="links"><li><a href="https://github.com/damisoda/Dev-Hive/pull/43">주제 파편화 진단 #43</a></li><li><a href="https://github.com/damisoda/Dev-Hive/pull/45">2패스 적용과 재구축 로그 #45</a></li><li><a href="#threshold">노드별 동적 임계값 설계</a></li></ul>
-  </section><section class="chapter" id="threshold" aria-labelledby="threshold-title">
-    <h2 id="threshold-title">콘텐츠 분포가 바뀌면 주제마다 편입 기준을 다시 계산했습니다</h2>
-    <p class="chapter-role"><strong>내가 맡은 일</strong> 시간순 유입 비교, 노드별 임계값 설계와 구현, 선택적 적용과 고정 기준 대체 경로 연결</p>
-    <div class="analysis-grid"><div><h3>관찰과 원인</h3><p>2패스로 주제 파편화는 줄었지만, 고정 임계값은 기존 콘텐츠의 유사도 분포에 맞춰져 있었습니다. 새 소스가 들어오자 각 글과 가장 가까운 주제 사이의 유사도 중앙값이 0.72대에서 0.63~0.65로 내려갔습니다. 기존 기준을 통과하지 못해 두 번째 단계로 넘어가는 글도 늘었습니다.</p></div>
-    <div><h3>구현과 선택 이유</h3><p>다른 주제의 글도 특정 주제와 높은 유사도를 보이는데, 그 정도가 주제마다 달랐습니다. 각 주제의 중심과 다른 주제 글 사이의 유사도를 모아 95번째 백분위수를 편입 기준으로 삼았습니다. 유사도 0.62 미만 구간의 편입 정밀도가 당시 진단에서 80%를 밑돌아 하한을 0.62로 뒀습니다. 그래프를 확장할 때 분포를 다시 읽고, 비교 표본이 없으면 고정 기준을 씁니다.</p></div></div>
-    <ol class="flow" aria-label="구현 흐름">
-  <li><strong>다른 주제 글과 비교</strong><span>각 주제 중심과 다른 주제 콘텐츠 사이에서 코사인 유사도 계산</span></li><li><strong>95번째 백분위수 계산</strong><span>다른 주제에 속한 글의 유사도 분포를 사용</span></li><li><strong>하한 적용</strong><span>노드별 임계값 = max(95번째 백분위수, 0.62)</span></li><li><strong>1패스 편입</strong><span>가장 가까운 주제의 임계값을 새 글에 적용</span></li>
-  </ol>
-
-    <figure class="comparison"><figcaption>시간순 유입 실험에서 1패스로 편입하지 못한 콘텐츠</figcaption>
-    <ul><li><span>고정 기준</span><meter min="0" max="902" value="717" aria-label="고정 기준"></meter><strong>717건</strong></li><li><span>동적 기준</span><meter min="0" max="902" value="534" aria-label="동적 기준"></meter><strong>534건</strong></li></ul>
-  </figure>
-    <h3>검증 결과</h3>
-    <div class="table-scroll"><table>
-
-  <thead><tr><th scope="col">발행일 순 유입 실험</th><th scope="col">고정 비교군</th><th scope="col">동적 기준</th></tr></thead>
-  <tbody><tr><th scope="row">배치 1, 1패스 잔여율</th><td>83.7%</td><td>68.1%</td></tr><tr><th scope="row">배치 2, 1패스 잔여율</th><td>78.5%</td><td>54.8%</td></tr><tr><th scope="row">배치 3, 1패스 잔여율</th><td>79.3%</td><td>63.7%</td></tr><tr><th scope="row">배치 4, 1패스 잔여율</th><td>88.9%</td><td>75.6%</td></tr><tr><th scope="row">누적 902건의 잔여 수</th><td>717건</td><td>534건, 약 26% 감소</td></tr></tbody>
-  </table></div>
-
-
-    <p class="scope"><strong>평가 범위</strong> 콘텐츠 902건을 발행일 순으로 유입시켰고, 고정 비교군의 임계값 0.724는 초기 360건으로 보정했습니다. 각 배치에서 기존 주제에 편입되지 않아 후속 군집화로 넘어간 글을 셌습니다. 동적 기준은 설정에서 선택적으로 켤 수 있습니다.</p>
-    <ul class="links"><li><a href="https://github.com/damisoda/Dev-Hive/pull/89">설계와 시간순 비교 #89</a></li><li><a href="https://github.com/damisoda/Dev-Hive/commit/64a018d09e2cd03bd16c345737208567417439b6">설계와 구현 커밋</a></li><li><a href="https://github.com/damisoda/Dev-Hive/blob/main/backend/tests/test_auto_hkg_dynamic.py">표본과 하한 검사</a></li></ul>
-  </section><section class="chapter" id="prerequisites" aria-labelledby="prerequisites-title">
-    <h2 id="prerequisites-title">추천 후보 400개 중 292개에 선행관계 점수를 반영했습니다</h2>
-    <p class="chapter-role"><strong>내가 맡은 일</strong> 하위 주제 분할, 선행관계 점수 계산 수정, 추천 근거 설명 연결</p>
-    <div class="analysis-grid"><div><h3>관찰과 원인</h3><p>하나의 대주제에 여러 성격의 글이 몰려 있어 spherical k-means로 하위 주제를 나눴습니다. 이후 글은 하위 주제 ID를 가리켰고, 기존 선행관계는 부모 주제 ID에 남아 있었습니다. 추천 코드가 하위 주제 ID로만 조회하자 기존 관계를 놓쳤고, 해당 자료의 선행 점수가 중립값 0.5로 처리됐습니다.</p></div>
-    <div><h3>구현과 선택 이유</h3><p>하위 주제에 직접 정의된 관계를 먼저 찾고, 없으면 부모 주제를 한 번 더 조회했습니다. 찾은 선행 주제마다 사용자의 숙련도를 관계 가중치로 평균 내고, 이 점수를 난이도, 관련성, 다양성과 함께 추천 순위에 반영했습니다. LLM은 1위 자료의 이유만 설명하고, 설명이 실패하면 순위에 쓴 근거를 템플릿으로 보여줍니다.</p></div></div>
-    <ol class="flow" aria-label="구현 흐름">
-  <li><strong>선행관계 조회</strong><span>하위 주제 ID 우선, 관계가 없으면 부모 주제 조회</span></li><li><strong>선행 충족도 계산</strong><span>선행 주제 숙련도의 관계 가중평균, 관계가 없으면 0.5</span></li><li><strong>추천 점수 계산</strong><span>난이도, 관련성, 선행 충족도, 다양성으로 재정렬</span></li><li><strong>추천 이유 제공</strong><span>1순위 이유를 생성하고 실패하면 템플릿으로 표시</span></li>
-  </ol>
-    <figure class="case-screen">
-    <a href="/assets/dev-hive-graph.png" aria-label="학습 자료 주제 그래프 원본 보기">
-      <img src="/assets/dev-hive-graph.png" alt="콘텐츠가 여러 색으로 구분된 주제 주변에 모인 Dev-Hive 그래프 시각화" width="1830" height="1757" loading="lazy" decoding="async">
-    </a>
-    <figcaption><strong>학습 자료 주제 그래프</strong><p>Dev-Hive에서 콘텐츠를 주제별로 묶은 결과를 시각화한 화면입니다. 선행관계 점수 계산은 아래 표와 구현 링크에서 확인할 수 있습니다.</p></figcaption>
-  </figure>
-
-    <h3>검증 결과</h3>
-    <div class="table-scroll"><table>
-
-  <thead><tr><th scope="col">후속 로컬 재구축</th><th scope="col">확인한 결과</th></tr></thead>
-  <tbody><tr><th scope="row">선행관계 점수 반영</th><td>추천 후보 400개 중 292개(73%)에서 점수 계산 확인</td></tr><tr><th scope="row">주제 그래프 재구축</th><td>하위 주제 68개 생성, 순환 관계 검사 후 선행관계 47개 반영</td></tr><tr><th scope="row">피드백 반영</th><td>이해, 어려움, 더 보기, 관심 없음으로 숙련도와 관심 상태 갱신</td></tr></tbody>
-  </table></div>
-
-    <div class="chapter-extra"><h3>하위 주제 분할 기준</h3><p>주제 중심과 유사도가 0.45 미만인 글은 하위 주제에 강제로 넣지 않았습니다.</p></div><div class="chapter-extra"><h3>선행 충족도 계산식</h3><p>선행 주제마다 관계 가중치와 사용자의 숙련도를 곱해 더한 뒤, 전체 관계 가중치의 합으로 나눴습니다.</p></div>
-    <p class="scope"><strong>평가 범위</strong> 로컬에서 주제 그래프를 재구축한 뒤 선행관계가 추천 점수에 반영되는지 확인했습니다. 숙련도는 읽은 이력과 피드백으로 추정했습니다. 검증 범위는 추천 점수 계산과 학습자 상태 갱신입니다.</p>
-    <ul class="links"><li><a href="https://github.com/damisoda/Dev-Hive/pull/115">하위 주제 분할 #115</a></li><li><a href="https://github.com/damisoda/Dev-Hive/blob/main/backend/app/recommend/graphrag.py">선행관계 점수 구현</a></li></ul>
-  </section></div>
-        </div>
-
-
-        <nav class="next-case" aria-label="다음 프로젝트"><span>다음 프로젝트</span><a href="/projects/career-piggybank/">커리어 저금통</a></nav>
-      </div>
-    </div>
-  </main><footer id="contact" class="site-footer"><div class="shell footer-inner">
-    <div><h2>연락</h2><a href="mailto:jodaeheum800@gmail.com">jodaeheum800@gmail.com</a><button type="button" class="copy-email" data-email="jodaeheum800@gmail.com">이메일 복사</button><p class="copy-status" role="status"></p></div>
-    <ul class="links"><li><a href="https://github.com/damisoda">GitHub</a></li><li><a href="/resume.pdf">이력서 PDF</a></li><li><a href="/portfolio.pdf">포트폴리오 PDF</a></li></ul>
-  </div></footer></body></html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>포트폴리오 PDF</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://damisoda.github.io/portfolio.pdf#page=7">
+<meta http-equiv="refresh" content="0;url=/portfolio.pdf#page=7">
+<style>
+body { margin: 0; font: 1rem/1.6 system-ui, sans-serif; color: #172638; background: #fff; }
+main { width: min(28rem, calc(100% - 2.5rem)); margin: 12vh auto 3rem; }
+h1 { margin: 0 0 1.5rem; font-size: 1.5rem; }
+ul { display: grid; gap: .75rem; padding: 0; list-style: none; }
+a { display: inline-block; padding: .65rem .95rem; border: 1px solid #bdc9d8; border-radius: .35rem; color: #244f92; text-underline-offset: .18em; }
+a:focus-visible { outline: 2px solid #244f92; outline-offset: 3px; }
+</style>
+</head>
+<body><main><h1>포트폴리오 PDF</h1><p><a href="/portfolio.pdf#page=7">PDF 열기</a></p></main></body>
+</html>

@@ -1,75 +1,60 @@
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { createHash } from 'node:crypto';
-import { buildPortfolio } from './portfolio.mjs';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { dirname, resolve, join } from 'node:path';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const projects = JSON.parse(readFileSync(join(root, 'data/projects.json'), 'utf8'));
-const homeProjects = ['come-back-home', 'dev-hive', 'career-piggybank']
-  .map(slug => projects.find(project => project.slug === slug));
-const activities = JSON.parse(readFileSync(join(root, 'data/activity.json'), 'utf8'));
-const assetVersion = createHash('sha256').update(readFileSync(join(root,'assets/style.css'))).update(readFileSync(join(root,'assets/app.js'))).digest('hex').slice(0,10);
-const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const arrow = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.6"/></svg>';
-const mark = '<svg class="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M8 24V8h16M8 24h16V8" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="8" r="4" fill="currentColor"/><circle cx="24" cy="8" r="4" fill="currentColor"/><circle cx="24" cy="24" r="4" fill="currentColor"/><circle cx="8" cy="24" r="4" fill="currentColor"/></svg>';
-const external = (url, label, className='text-link') => `<a class="${className}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}${arrow}</a>`;
-const tags = p => `<ul class="tags" aria-label="사용 기술">${p.stack.map(s => `<li>${esc(s)}</li>`).join('')}</ul>`;
-const header = () => `<a class="skip-link" href="#main">본문 바로가기</a><header class="site-header"><a class="brand" href="/" aria-label="조대흠 포트폴리오 홈">${mark}<span>Daeheum Cho<span class="brand-handle"> / damisoda</span></span></a><button class="menu-toggle" aria-expanded="false" aria-controls="navigation">메뉴</button><nav id="navigation" aria-label="주요 메뉴"><a href="/#work">프로젝트</a><a href="/#skills">기술</a><a href="/#about">소개</a><a href="/#activity">활동</a><a href="/#contact">연락</a><a href="/resume.pdf" target="_blank" rel="noopener noreferrer">이력서</a>${external('https://github.com/damisoda','GitHub','nav-github')}<button class="theme-toggle" aria-label="어두운 테마로 전환" title="테마 전환"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M12 5a7 7 0 0 1 0 14Z" fill="currentColor"/></svg></button></nav></header>`;
-const footer = () => `<footer class="site-footer"><a class="brand" href="/">${mark}<span>Daeheum Cho</span></a><p>만드는 과정과 검증 기록을 남깁니다.</p><a href="https://github.com/damisoda">GitHub</a><a href="mailto:jodaeheum800@gmail.com">Email</a><span class="footer-date">2026.11 업데이트</span></footer>`;
+const root = fileURLToPath(new URL('..', import.meta.url));
+const site = 'https://damisoda.github.io';
+const documents = [
+  ['포트폴리오 PDF', '/portfolio.pdf'],
+  ['이력서 PDF', '/resume.pdf'],
+];
+const documentLinks = `<ul>${documents.map(([label, path]) => `<li><a href="${path}">${label}</a></li>`).join('')}</ul>`;
 
-function imagePanel(p, {large=false}={}) {
-  if(p.slug==='come-back-home') return `<div class="project-visual visual-cbh ${large?'large-visual':''}"><div class="phone-pair"><img src="/assets/cbh-guardian.png" alt="돌아오길 보호자 홈 데모" loading="lazy" width="750" height="1624"><img src="/assets/cbh-map.png" alt="돌아오길 예측 구역 지도 데모" loading="lazy" width="750" height="1624"></div><span class="visual-note">생활사에서 수색 구역까지</span></div>`;
-  if(p.slug==='career-piggybank') return `<div class="project-visual visual-piggy visual-app ${large?'large-visual':''}"><div class="phone-pair"><img src="/assets/piggy-home.png" alt="커리어 저금통 홈 데모" loading="lazy" width="393" height="852"><img src="/assets/piggy-ledger.png" alt="커리어 저금통 가계부 데모" loading="lazy" width="393" height="852"></div><span class="visual-note">커리어에서 일상과 미래까지</span></div>`;
-  return `<div class="project-visual visual-${p.slug==='design-qa-agent'?'dqa':'hive'} ${large?'large-visual':''}"><img src="/assets/${esc(p.image)}" alt="${esc(p.alt)}" loading="lazy" ${p.slug==='design-qa-agent'?'width="960" height="540"':'width="1200" height="850"'}></div>`;
-}
-
-function productTour(p) {
- if(!p.screens?.length)return '';
- const first=p.screens[0];
- return `<section id="demo" class="product-tour" aria-labelledby="tour-heading"><div class="section-heading"><div><h2 id="tour-heading">앱에서는 이렇게 이어집니다.</h2><p>화면을 골라 살펴보거나, 데모를 직접 눌러보세요.</p></div></div><div class="tour-layout" data-product-tour><figure class="tour-phone"><img data-tour-image src="/assets/${esc(first.image)}" alt="${esc(first.title)} · 기존 앱의 예제 데이터 화면" loading="lazy" width="393" height="852"><figcaption data-tour-caption>${esc(first.label)} · 실제 앱 데모 화면</figcaption></figure><div class="tour-options" role="group" aria-label="커리어 저금통 화면 선택">${p.screens.map((x,i)=>`<button type="button" aria-pressed="${i===0}" data-tour-image-src="/assets/${esc(x.image)}" data-tour-label="${esc(x.label)}" data-tour-title="${esc(x.title)}" data-tour-description="${esc(x.description)}">${esc(x.label)}</button>`).join('')}</div><div class="tour-copy"><div class="tour-description" aria-live="polite"><h3 data-tour-title>${esc(first.title)}</h3><p data-tour-description>${esc(first.description)}</p></div><a class="button primary" href="${esc(p.demoUrl)}" target="_blank" rel="noopener noreferrer">데모 체험${arrow}</a><p class="demo-instructions">첫 화면의 ‘건너뛰기’로 둘러보거나, ‘다음’으로 시작해 이력을 모으는 과정부터 살펴볼 수 있습니다. 하단의 홈·가계부·미션·커리어·미래 탭을 눌러보세요.</p><p class="demo-scope">저장소의 예제 응답을 사용하는 화면 체험입니다. 실제 금융기관 연결·거래·모델 호출은 하지 않습니다. 상품·금액·예측 결과는 예시입니다.</p></div></div></section>`;
-}
-
-function md(x){return esc(x).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');}
-function operations(p) {
- if(!p.operations)return '';
- return `<section id="operations" class="operations"><h2>운영하며 고친 것</h2><p>배포한 서비스를 직접 운영하며 사용자가 겪은 문제를 고친 기록입니다.</p><ol class="ops-list">${p.operations.map(o=>`<li><div class="ops-head"><span class="ops-date">${esc(o.date)}</span><h3>${esc(o.title)}</h3></div><dl><dt>원인</dt><dd>${esc(o.cause)}</dd><dt>조치</dt><dd>${esc(o.action)}</dd><dt>결과</dt><dd>${esc(o.result)}</dd></dl><a class="text-link" href="${esc(o.pr)}" target="_blank" rel="noopener noreferrer">PR 보기${arrow}</a></li>`).join('')}</ol></section>`;
-}
-function reflection(p) {
- if(!p.reflection)return '';
- return `<section id="reflection" class="reflection"><h2>${esc(p.reflection.title)}</h2>${p.reflection.paragraphs.map(x=>`<p>${esc(x)}</p>`).join('')}</section>`;
-}
-function solving(p) {
- const s=p.solving; if(!s)return '';
- const list=(xs)=>`<ul class="solve-list">${xs.map(x=>`<li>${md(x)}</li>`).join('')}</ul>`;
- return `<section id="solving" class="solving"><p class="solve-kicker">문제 해결</p><h2>${esc(s.title)}</h2><figure class="solve-figure"><img src="/assets/${esc(s.figure)}" alt="${esc(s.alt)}" loading="lazy"><figcaption>전체 구조, 점선은 문제가 발생한 지점</figcaption></figure><h3>문제 원인</h3>${list(s.cause)}<h3>해결 과정</h3>${list(s.solution)}<h3>결과</h3>${list(s.result)}</section>`;
-}
-function architecture(p) {
- if(!p.arch)return '';
- return `<section id="architecture"><h2>시스템은 어떻게 구성되나요?</h2><ol class="arch-stack" aria-label="${esc(p.title)} 시스템 구조">${p.arch.map(([layer,items])=>`<li><span class="arch-layer">${esc(layer)}</span><ul>${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></li>`).join('')}</ol>${p.archNote?`<p class="arch-note">${esc(p.archNote)}</p>`:''}</section>`;
-}
-function supplement(p) {
- if(!p.supplement)return '';
- return `<details class="supporting-visual"><summary>콘텐츠 지식그래프 보기</summary><figure><img src="/assets/${esc(p.supplement.image)}" alt="${esc(p.supplement.alt)}" loading="lazy" width="1599" height="1535"><figcaption>${esc(p.supplement.caption)}</figcaption></figure></details>`;
+function page(file, title, content, { destination } = {}) {
+  const output = join(root, file);
+  mkdirSync(dirname(output), { recursive: true });
+  writeFileSync(output, `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${title}</title>
+${destination ? `<meta name="robots" content="noindex">
+<link rel="canonical" href="${site}${destination}">
+<meta http-equiv="refresh" content="0;url=${destination}">` : ''}
+<style>
+body { margin: 0; font: 1rem/1.6 system-ui, sans-serif; color: #172638; background: #fff; }
+main { width: min(28rem, calc(100% - 2.5rem)); margin: 12vh auto 3rem; }
+h1 { margin: 0 0 1.5rem; font-size: 1.5rem; }
+ul { display: grid; gap: .75rem; padding: 0; list-style: none; }
+a { display: inline-block; padding: .65rem .95rem; border: 1px solid #bdc9d8; border-radius: .35rem; color: #244f92; text-underline-offset: .18em; }
+a:focus-visible { outline: 2px solid #244f92; outline-offset: 3px; }
+</style>
+</head>
+<body><main><h1>${title}</h1>${content}</main></body>
+</html>
+`);
 }
 
-function frame(title, description, path, content) {
- return `<!doctype html><html lang="ko" data-theme="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="https://damisoda.github.io${path}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="website"><meta property="og:url" content="https://damisoda.github.io${path}"><meta name="twitter:card" content="summary"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><script>try{const t=localStorage.getItem('portfolio-theme');if(t==='dark')document.documentElement.dataset.theme='dark'}catch{}</script><link rel="stylesheet" href="/assets/style.css?v=${assetVersion}"><script src="/assets/app.js?v=${assetVersion}" defer></script></head><body>${header()}${content}${footer()}</body></html>`;
+page('index.html', '조대흠', documentLinks);
+page('404.html', '문서 링크', documentLinks);
+page('404/index.html', '문서 링크', documentLinks);
+page('_not-found/index.html', '문서 링크', documentLinks);
+
+for (const [slug, pdfPage] of [
+  ['come-back-home', 2],
+  ['dev-hive', 7],
+  ['career-piggybank', 11],
+  ['design-qa-agent', null],
+]) {
+  const destination = pdfPage ? `/portfolio.pdf#page=${pdfPage}` : '/portfolio.pdf';
+  page(`projects/${slug}/index.html`, '포트폴리오 PDF', `<p><a href="${destination}">PDF 열기</a></p>`, { destination });
 }
 
-buildPortfolio(root, activities, projects, productTour);
+writeFileSync(join(root, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${['/', ...documents.map(([, path]) => path)].map(path => `  <url><loc>${site}${path}</loc></url>`).join('\n')}
+</urlset>
+`);
 
-for(const p of projects.filter(project => !homeProjects.includes(project))) {
- const visibleIndex = homeProjects.indexOf(p);
- const next = homeProjects[(visibleIndex + 1) % homeProjects.length];
- const content = `<main id="main" class="case-page"><a class="back-link" href="/#work"><span aria-hidden="true">←</span> 모든 프로젝트</a><section class="case-intro"><div class="project-meta"><span>${esc(p.kind)}</span><span>${esc(p.period)}</span></div><h1>${esc(p.title)}</h1><p class="case-subtitle">${esc(p.subtitle)}</p>${tags(p)}<div class="case-actions">${p.demoUrl?external(p.demoUrl,'데모 체험','button primary'): ''}${external(p.repo,'GitHub 저장소',p.demoUrl?'button secondary':'button primary')}<span class="case-recognition">${esc(p.highlight)}</span></div></section><figure class="case-figure">${imagePanel(p,{large:true})}<figcaption>${esc(p.imageLabel)}</figcaption></figure><div class="case-body"><aside class="case-toc" aria-label="프로젝트 목차">${p.screens?.length?'<a href="#demo">앱 화면과 데모</a>':''}${p.solving?'<a href="#solving">문제 해결</a>':''}${p.operations?'<a href="#operations">운영하며 고친 것</a>':''}${p.reflection?'<a href="#reflection">AI 판단의 한계</a>':''}<a href="#problem">다룬 문제</a><a href="#contribution">참여한 일</a>${p.arch?'<a href="#architecture">시스템 구조</a>':''}<a href="#decisions">구현 선택</a><a href="#validation">검증과 한계</a></aside><div class="case-content"><section id="problem"><h2>어떤 문제를 다뤘나요?</h2><p>${esc(p.problem)}</p></section><section id="contribution"><h2>어떤 일에 참여했나요?</h2><p>${esc(p.role)}</p></section>${architecture(p)}${solving(p)}${operations(p)}${reflection(p)}<section id="decisions"><h2>서비스는 어떻게 동작하나요?</h2><ol class="case-process">${p.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="decision-list">${p.decisions.map(([title,desc])=>`<article><h3>${esc(title)}</h3><p>${esc(desc)}</p></article>`).join('')}</div></section><section id="validation"><h2>무엇을 확인했나요?</h2>${p.metrics.length?`<div class="metrics">${p.metrics.map(([value,label])=>`<div><strong>${esc(value)}</strong><span>${esc(label)}</span></div>`).join('')}</div>`:''}<p>${esc(p.evidence)}</p>${supplement(p)}<div class="scope-note"><h3>확인한 범위와 남은 한계</h3><p>${esc(p.limitations)}</p></div><div class="evidence-links">${p.links.map(([label,url])=>external(url,label)).join('')}</div></section></div></div>${productTour(p)}<a class="next-project" href="/projects/${next.slug}/"><span>다음 프로젝트</span><strong>${esc(next.title)}</strong>${arrow}</a></main>`;
- const dir=join(root,'projects',p.slug);mkdirSync(dir,{recursive:true});
- writeFileSync(join(dir,'index.html'),frame(`${p.title}, 조대흠 포트폴리오`,p.summary,`/projects/${p.slug}/`,content));
-}
-const notFound=frame('페이지를 찾을 수 없습니다 · 조대흠','프로젝트 목록에서 원하는 작업을 찾아보세요.','/404.html','<main id="main" class="not-found"><p>404</p><h1>여기에는 페이지가 없어요.</h1><a class="button primary" href="/">포트폴리오 홈으로</a></main>');
-writeFileSync(join(root,'404.html'),notFound);
-for(const dir of ['404','_not-found']){mkdirSync(join(root,dir),{recursive:true});writeFileSync(join(root,dir,'index.html'),notFound);}
-writeFileSync(join(root,'favicon.svg'),`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#2457b7"/><g fill="#fff"><circle cx="20" cy="20" r="5"/><circle cx="44" cy="20" r="5"/><circle cx="44" cy="44" r="5"/><circle cx="20" cy="44" r="5"/></g><path d="M20 20h24v24H20Z" stroke="#fff" stroke-width="3" fill="none"/></svg>`);
-writeFileSync(join(root,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['/',...projects.map(p=>`/projects/${p.slug}/`)].map(path=>`<url><loc>https://damisoda.github.io${path}</loc></url>`).join('')}</urlset>`);
-writeFileSync(join(root,'robots.txt'),'User-agent: *\nAllow: /\nSitemap: https://damisoda.github.io/sitemap.xml\n');
-console.log(`Built home, ${projects.length} case studies, 404 and sitemap.`);
+console.log('Built the PDF index and compatibility links.');
