@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/portfolio.css?v=8acf6f2c5997">
-<script src="/assets/app.js?v=8acf6f2c5997" defer></script>
+<link rel="stylesheet" href="/assets/portfolio.css?v=be9fcf88b2d2">
+<script src="/assets/app.js?v=be9fcf88b2d2" defer></script>
 </head><body><a class="skip-link" href="#main">본문 바로가기</a>
   <header class="site-header"><div class="shell mast">
     <a class="brand" href="/"><strong>조대흠</strong><span>AI Engineer</span></a>
@@ -62,6 +62,7 @@
     <ol class="flow" aria-label="구현 흐름">
   <li><strong>보행 시작</strong><span>0분에 걷기 시작</span></li><li><strong>휴식</strong><span>6분에 앉아서 쉬기 시작</span></li><li><strong>보행 재개</strong><span>5분 휴식 뒤 11분에 재개</span></li>
   </ol>
+
     <figure class="comparison"><figcaption>같은 해석 8건의 원문 근거 판정</figcaption>
     <ul><li><span>원문 재검토 전</span><meter min="0" max="8" value="6" aria-label="원문 재검토 전"></meter><strong>6/8 통과</strong></li><li><span>원문 재검토 후</span><meter min="0" max="8" value="8" aria-label="원문 재검토 후"></meter><strong>8/8 통과</strong></li></ul>
   </figure>
@@ -81,6 +82,7 @@
     <div class="analysis-grid"><div><h3>관찰과 원인</h3><p>기존 dem3는 시연 동네인 정릉이 입력되면 75회 중 74회 목적지 후보를 냈지만, 형식은 두고 다른 10개 동네 이름으로 바꾸면 3회에 그쳤습니다. 정릉동 라벨이 있을 때 서로 다른 합성 프로필 5종은 각각 15회 모두 “끌림점 접근”만 골랐습니다. 기존 학습 정답 라벨은 “재래시장” 같은 일반명사로만 구성돼 있었습니다.</p></div>
     <div><h3>구현과 선택 이유</h3><p>구체적인 지명도 답으로 낼 수 있도록 학습 예시를 추가했습니다. 지명이 정답 힌트가 되지 않도록 목적지와 평소 들르는 곳, 이름만 언급한 곳에 모두 실제 지명을 넣었습니다. 보호자가 해당 장소로 향하는 모습을 여러 번 본 사례는 후보를 고르고, 이동 근거가 부족한 사례는 보류하도록 구성했습니다. 생성기에서 평가 지명과 파생 표기가 학습 또는 검증 데이터에 들어가는지도 검사했습니다.</p></div></div>
 
+
     <figure class="comparison"><figcaption>다른 동네 이름으로 바꾼 같은 75회에서 목적지 후보를 반환한 횟수</figcaption>
     <ul><li><span>기존 dem3</span><meter min="0" max="75" value="3" aria-label="기존 dem3"></meter><strong>3/75, 4.0%</strong></li><li><span>재학습 dem5</span><meter min="0" max="75" value="27" aria-label="재학습 dem5"></meter><strong>27/75, 36.0%</strong></li></ul>
   </figure>
@@ -99,6 +101,7 @@
     <p class="chapter-role"><strong>내가 맡은 일</strong> 봉인 시험을 실행하고 모델의 원응답을 다시 채점했으며, 평가기를 수정했습니다.</p>
     <div class="analysis-grid"><div><h3>관찰과 원인</h3><p>dem5 봉인 시험에서 혼란도와 행동 점수가 모두 100%였습니다. 혼란도 채점은 모델 원응답 대신 커밋되지 않은 운영 규칙이 바꾼 값을 읽고 있었습니다. 행동 시험에는 금지된 답이 하나도 없어 모든 상황에 “끌림점 접근”으로 답해도 모델과 같은 12/12를 받았습니다.</p></div>
     <div><h3>구현과 선택 이유</h3><p>운영 규칙이 바꾸기 전의 응답을 채점하고, 항상 같은 답을 내는 기준도 동일한 방식으로 평가하도록 수정했습니다. 개발 시험에 저장된 같은 응답 32건을 다시 채점하니 모델은 24건(75%), 항상 “중”이라고 답하는 기준은 28건(88%)이 허용 범위에 들었습니다. 서비스의 혼란도 계산은 기존 규칙을 유지했습니다. 행동 지표는 이 시험으로 판단력을 구분할 수 없어 판정 불가로 정정했습니다.</p></div></div>
+
 
     <figure class="comparison"><figcaption>혼란도 채점과 상수 기준 비교</figcaption>
     <ul><li><span>처음 보고된 점수</span><meter min="0" max="100" value="100" aria-label="처음 보고된 점수"></meter><strong>100%</strong></li><li><span>원응답 재채점</span><meter min="0" max="32" value="24" aria-label="원응답 재채점"></meter><strong>24/32, 75%</strong></li><li><span>항상 “중”으로 답하는 기준</span><meter min="0" max="32" value="28" aria-label="항상 “중”으로 답하는 기준"></meter><strong>28/32, 88%</strong></li></ul>
@@ -121,6 +124,12 @@
     <ol class="flow" aria-label="구현 흐름">
   <li><strong>제보 요청</strong><span>시민이 Expo에서 제보 전송</span></li><li><strong>접수증 먼저 저장</strong><span>submission_id를 검사한 뒤 접수 상태를 SQLite에 기록</span></li><li><strong>접수 완료 응답</strong><span>저장 결과를 요청에 즉시 반환</span></li><li><strong>분석과 재예측</strong><span>백그라운드에서 처리하고 대기 작업은 재시작 후 이어서 수행</span></li>
   </ol>
+    <figure class="case-screen case-screen-phone">
+    <a href="/assets/cbh-map.png" aria-label="수색 구역과 제보 화면 원본 보기">
+      <img src="/assets/cbh-map.png" alt="돌아오길 데모에서 육각형으로 표시한 수색 구역과 목격 제보 버튼" width="750" height="1624" loading="lazy" decoding="async">
+    </a>
+    <figcaption><strong>수색 구역과 제보 화면</strong><p>돌아오길 데모에서 시민은 알림 구역을 지도에서 확인하고, 같은 화면에서 목격 내용을 제보할 수 있습니다.</p></figcaption>
+  </figure>
 
     <h3>검증 결과</h3>
     <div class="table-scroll"><table>

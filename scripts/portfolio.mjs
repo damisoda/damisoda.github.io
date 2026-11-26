@@ -103,7 +103,12 @@ function homepage(activities) {
   const experience = activities.filter(item => item.type !== '인턴십');
   return `<main id="main">
     <section class="hero" aria-labelledby="hero-title"><div class="shell hero-inner">
-      <div class="hero-copy"><h1 id="hero-title">모델의 판단을 검증하고<br> 서비스에 연결합니다.</h1>
+      <div class="hero-copy">
+        <div class="hero-identity">
+          <img src="/assets/daeheum-cho.jpg" alt="조대흠 증명사진" width="413" height="531">
+          <div><strong>조대흠</strong><span>AI 엔지니어</span></div>
+        </div>
+        <h1 id="hero-title">모델의 판단을 검증하고<br> 서비스에 연결합니다.</h1>
         <p>실종자 수색, AI 학습 추천, 생활금융 서비스에서 모델의 출력이 실제 기능에 반영되는 과정을 설계하고 검증했습니다.</p>
         <div class="actions"><a class="button primary" href="/portfolio.pdf">포트폴리오 PDF</a><a class="button secondary" href="/resume.pdf">이력서 PDF</a></div>
       </div>
@@ -181,6 +186,18 @@ function comparison(data) {
   </figure>`;
 }
 
+function caseScreen(screen) {
+  if (!screen) return '';
+  const source = `/assets/${text(screen.file)}`;
+  const mobile = screen.width < screen.height / 1.5;
+  return `<figure class="case-screen${mobile ? ' case-screen-phone' : ''}">
+    <a href="${source}" aria-label="${text(screen.title)} 원본 보기">
+      <img src="${source}" alt="${text(screen.alt)}" width="${Number(screen.width)}" height="${Number(screen.height)}" loading="lazy" decoding="async">
+    </a>
+    <figcaption><strong>${text(screen.title)}</strong><p>${text(screen.caption)}</p></figcaption>
+  </figure>`;
+}
+
 function chapter(entry) {
   return `<section class="chapter" id="${text(entry.id)}" aria-labelledby="${text(entry.id)}-title">
     <h2 id="${text(entry.id)}-title">${text(entry.title)}</h2>
@@ -188,6 +205,7 @@ function chapter(entry) {
     <div class="analysis-grid"><div><h3>관찰과 원인</h3><p>${text(entry.observation)}</p></div>
     <div><h3>구현과 선택 이유</h3><p>${text(entry.decision)}</p></div></div>
     ${entry.flow ? flow(entry.flow, '구현 흐름') : ''}
+    ${caseScreen(entry.screen)}
     ${comparison(entry.comparison)}
     <h3>검증 결과</h3>
     ${table(entry.table)}

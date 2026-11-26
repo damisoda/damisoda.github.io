@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/portfolio.css?v=8acf6f2c5997">
-<script src="/assets/app.js?v=8acf6f2c5997" defer></script>
+<link rel="stylesheet" href="/assets/portfolio.css?v=be9fcf88b2d2">
+<script src="/assets/app.js?v=be9fcf88b2d2" defer></script>
 </head><body><a class="skip-link" href="#main">본문 바로가기</a>
   <header class="site-header"><div class="shell mast">
     <a class="brand" href="/"><strong>조대흠</strong><span>AI Engineer</span></a>
@@ -60,6 +60,7 @@
     <ol class="flow" aria-label="구현 흐름">
   <li><strong>1패스, 기존 주제 편입</strong><span>비자동 주제, 코사인 유사도 0.70 이상</span></li><li><strong>2패스, 남은 글 군집화</strong><span>유사도 0.65 이상인 연결, 군집 크기 3건 이상</span></li><li><strong>주제 이름 생성</strong><span>LLM에 군집 이름과 설명만 요청</span></li>
   </ol>
+
     <figure class="comparison"><figcaption>콘텐츠 924건 재구축에서 자동 생성된 주제 수</figcaption>
     <ul><li><span>변경 전</span><meter min="0" max="924" value="825" aria-label="변경 전"></meter><strong>825개</strong></li><li><span>2패스 적용 후</span><meter min="0" max="924" value="24" aria-label="2패스 적용 후"></meter><strong>24개</strong></li></ul>
   </figure>
@@ -81,6 +82,7 @@
     <ol class="flow" aria-label="구현 흐름">
   <li><strong>다른 주제 글과 비교</strong><span>각 주제 중심과 다른 주제 콘텐츠 사이에서 코사인 유사도 계산</span></li><li><strong>95번째 백분위수 계산</strong><span>다른 주제에 속한 글의 유사도 분포를 사용</span></li><li><strong>하한 적용</strong><span>노드별 임계값 = max(95번째 백분위수, 0.62)</span></li><li><strong>1패스 편입</strong><span>가장 가까운 주제의 임계값을 새 글에 적용</span></li>
   </ol>
+
     <figure class="comparison"><figcaption>시간순 유입 실험에서 1패스로 편입하지 못한 콘텐츠</figcaption>
     <ul><li><span>고정 기준</span><meter min="0" max="902" value="717" aria-label="고정 기준"></meter><strong>717건</strong></li><li><span>동적 기준</span><meter min="0" max="902" value="534" aria-label="동적 기준"></meter><strong>534건</strong></li></ul>
   </figure>
@@ -102,6 +104,12 @@
     <ol class="flow" aria-label="구현 흐름">
   <li><strong>선행관계 조회</strong><span>하위 주제 ID 우선, 관계가 없으면 부모 주제 조회</span></li><li><strong>선행 충족도 계산</strong><span>선행 주제 숙련도의 관계 가중평균, 관계가 없으면 0.5</span></li><li><strong>추천 점수 계산</strong><span>난이도, 관련성, 선행 충족도, 다양성으로 재정렬</span></li><li><strong>추천 이유 제공</strong><span>1순위 이유를 생성하고 실패하면 템플릿으로 표시</span></li>
   </ol>
+    <figure class="case-screen">
+    <a href="/assets/dev-hive-graph.png" aria-label="학습 자료 주제 그래프 원본 보기">
+      <img src="/assets/dev-hive-graph.png" alt="콘텐츠가 여러 색으로 구분된 주제 주변에 모인 Dev-Hive 그래프 시각화" width="1830" height="1757" loading="lazy" decoding="async">
+    </a>
+    <figcaption><strong>학습 자료 주제 그래프</strong><p>Dev-Hive에서 콘텐츠를 주제별로 묶은 결과를 시각화한 화면입니다. 선행관계 점수 계산은 아래 표와 구현 링크에서 확인할 수 있습니다.</p></figcaption>
+  </figure>
 
     <h3>검증 결과</h3>
     <div class="table-scroll"><table>

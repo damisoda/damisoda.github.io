@@ -53,6 +53,10 @@ button:disabled { cursor: default; }
 
 .hero { display: grid; align-items: center; min-height: min(464px, calc(100svh - 72px)); border-bottom: 1px solid var(--line); }
 .hero-inner { padding-block: clamp(3rem, 5.25vw, 4.6rem); display: grid; grid-template-columns: minmax(0, 1.36fr) minmax(0, 1fr); gap: var(--gap); align-items: end; }
+.hero-identity { display: flex; align-items: center; gap: .9rem; margin-bottom: 1.25rem; }
+.hero-identity img { width: 76px; height: auto; border: 1px solid var(--line); }
+.hero-identity strong, .hero-identity span { display: block; }
+.hero-identity span { font-size: .86rem; color: var(--muted); }
 .hero h1 { font-size: clamp(1.9rem, 3.5vw, 3.35rem); line-height: 1.22; margin-bottom: 1.3rem; }
 .hero-copy p { max-width: 34ch; font-size: clamp(1rem, 1.35vw, 1.1rem); }
 .actions { display: flex; gap: .65rem; flex-wrap: wrap; margin-top: 1.45rem; }
@@ -135,6 +139,14 @@ button:disabled { cursor: default; }
 .flow li:last-child { box-shadow: none; }
 .flow li strong { display: block; color: var(--accent); }
 .flow li span { display: block; margin-top: .3rem; color: var(--muted); font-size: .88rem; line-height: 1.6; }
+.case-screen { margin: 1.65rem 0 2rem; }
+.case-screen a { display: block; width: min(100%, 35rem); }
+.case-screen img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
+.case-screen figcaption { margin-top: .75rem; color: var(--muted); font-size: .9rem; }
+.case-screen figcaption strong { color: var(--ink); }
+.case-screen figcaption p { margin-top: .25rem; max-width: 54ch; }
+.case-screen-phone { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: 1.35rem; align-items: start; }
+.case-screen-phone figcaption { margin-top: 0; }
 .comparison { margin: 1.6rem 0 2.1rem; padding: 1rem 0; border-block: 3px double var(--line-strong); }
 .comparison figcaption { margin-bottom: .75rem; font-weight: 600; }
 .comparison ul { list-style: none; padding: 0; margin: 0; }
@@ -184,6 +196,9 @@ td { font-variant-numeric: tabular-nums; }
   .mast { min-height: 64px; align-content: center; flex-wrap: wrap; gap: 0; }
   .brand { font-size: 1.1rem; }
   .hero h1 br { display: none; }
+  .hero-identity { margin-bottom: 1rem; }
+  .hero-identity img { width: 60px; }
+  .case-screen-phone { grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr); gap: .9rem; }
   .js .menu-toggle { display: inline-block; min-height: 44px; padding: .35rem .75rem; color: var(--ink); background: var(--paper); border: 1px solid var(--line); }
   .mast nav { width: 100%; gap: 0 1rem; padding-block: .3rem; }
   .js .mast nav { display: none; }
