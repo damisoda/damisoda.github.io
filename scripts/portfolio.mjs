@@ -54,15 +54,15 @@ function header() {
     <a class="brand" href="/"><strong>조대흠</strong><span>AI Engineer</span></a>
     <button type="button" class="menu-toggle" aria-controls="navigation" aria-expanded="false">메뉴</button>
     <nav id="navigation" aria-label="주요 메뉴">
-      <a href="/#work">프로젝트</a><a href="/#activity">경력과 활동</a><a href="/#skills">기술</a>
-      <a href="/resume.pdf">이력서</a><a href="/portfolio.pdf">포트폴리오 PDF</a><a href="https://github.com/damisoda">GitHub</a>
+      <a href="/#work">대표 프로젝트</a><a href="/#activity">경력</a><a href="/#skills">역량</a><a href="/#projects">다른 프로젝트</a><a href="/#contact">연락</a>
+      <a class="nav-resume" href="/resume.pdf">이력서 PDF</a>
     </nav>
   </div></header>`;
 }
 
 function footer() {
   return `<footer id="contact" class="site-footer"><div class="shell footer-inner">
-    <div><h2>조대흠</h2><a href="mailto:${email}">${email}</a><button type="button" class="copy-email" data-email="${email}">이메일 복사</button><p class="copy-status" role="status"></p></div>
+    <div><h2>연락</h2><a href="mailto:${email}">${email}</a><button type="button" class="copy-email" data-email="${email}">이메일 복사</button><p class="copy-status" role="status"></p></div>
     ${links([['GitHub', 'https://github.com/damisoda'], ['이력서 PDF', '/resume.pdf'], ['포트폴리오 PDF', '/portfolio.pdf']])}
   </div></footer>`;
 }
@@ -86,81 +86,103 @@ function document(title, description, path, content, version) {
 }
 
 function workEntry(project) {
+  const visual = project.chapters.find(entry => entry.screen);
+  const screen = visual.screen;
+  const path = projectPath(project);
   return `<article class="work-entry" data-project="${project.slug}">
-    <div class="work-title"><h3><a href="${projectPath(project)}">${text(project.title)}</a></h3><p>${text(project.period)}</p></div>
-    <div class="work-description"><p>${text(project.intro)}</p>
+    <div class="work-info">
+      <p class="work-meta">${text(project.period)} <span>${text(project.feature)}</span></p>
+      <h3><a href="${path}">${text(project.title)}</a></h3>
+      <p class="work-summary">${text(project.intro)}</p>
       <dl class="work-details">
         <div><dt>역할</dt><dd>${text(project.contribution)}</dd></div>
         <div><dt>기술</dt><dd>${text(project.technology)}</dd></div>
       </dl>
-      ${links([['프로젝트 읽기', projectPath(project)], ['GitHub 저장소', project.links[0][1]]])}
+      <div class="work-metric"><strong>${text(project.metric)}</strong><span>${text(project.measurement)}</span></div>
+      ${links([['설계와 평가 기록', path], ['GitHub 저장소', project.links[0][1]]])}
     </div>
-    <div class="work-metric"><strong>${text(project.metric)}</strong><span>${text(project.measurement)}</span></div>
+    <figure class="work-visual">
+      <a href="${path}#${visual.id}" aria-label="${text(screen.title)} 상세 보기">
+        <img src="/assets/${text(screen.file)}" alt="${text(screen.alt)}" width="${screen.width}" height="${screen.height}" loading="lazy" decoding="async">
+      </a>
+      <figcaption>${text(screen.title)}</figcaption>
+    </figure>
   </article>`;
 }
 
 function homepage(activities) {
-  const experience = activities.filter(item => item.type !== '인턴십');
+  const background = activities.filter(item => item.type !== '인턴십');
+  const skills = [
+    ['모델 평가와 서빙', '근거가 맞는지 코드로 확인하고, LoRA 후보를 비교해 적용 범위를 정했습니다.', 'EXAONE, LoRA, vLLM, Ollama', ['돌아오길 평가기 수정', '/projects/come-back-home/#validation']],
+    ['검색과 추천', '주제 그래프의 편입 기준을 설계하고, 선행관계가 추천 순위에 반영되도록 구현했습니다.', 'pgvector, GraphRAG, PostgreSQL', ['Dev-Hive 선행관계 추천', '/projects/dev-hive/#prerequisites']],
+    ['백엔드와 앱 연결', '제보 접수를 백그라운드 분석과 분리하고, 금융 데모에서는 사용자 승인 후 원장을 갱신했습니다.', 'Python, FastAPI, Supabase, SQLite, Expo, Next.js, Docker, pytest', ['커리어 저금통 승인 처리', '/projects/career-piggybank/#approval']],
+  ];
+  const moreProjects = [
+    ['Paper-Digest', '논문 수집, 로컬 요약, Obsidian 저장과 Discord 알림', 'https://github.com/damisoda/Paper-Digest'],
+    ['LOVELOP 에이전트 시뮬레이터', '생성형 에이전트를 활용한 상권 전략 전후 비교', 'https://github.com/damisoda/LOVELOP-commercial-agent-simulator'],
+    ['한국어 텍스트 복원', '자모 분리와 KoBART를 활용한 텍스트 복원', 'https://github.com/damisoda/text-recovery'],
+    ['Paw Patrol Network', '보도 파손 탐지와 민원 문안 작성 지원', 'https://github.com/damisoda/TECH4GOOD_Hackerthon'],
+  ];
   return `<main id="main">
     <section class="hero" aria-labelledby="hero-title"><div class="shell hero-inner">
       <div class="hero-copy">
-        <div class="hero-identity">
-          <img src="/assets/daeheum-cho.jpg" alt="조대흠 증명사진" width="413" height="531">
-          <div><strong>조대흠</strong><span>AI 엔지니어</span></div>
-        </div>
         <h1 id="hero-title">모델의 판단을 검증하고<br> 서비스에 연결합니다.</h1>
         <p>실종자 수색, AI 학습 추천, 생활금융 서비스에서 모델의 출력이 실제 기능에 반영되는 과정을 설계하고 검증했습니다.</p>
-        <div class="actions"><a class="button primary" href="/portfolio.pdf">포트폴리오 PDF</a><a class="button secondary" href="/resume.pdf">이력서 PDF</a></div>
+        <div class="actions"><a class="button primary" href="#work">대표 프로젝트 보기</a><a class="button secondary" href="/resume.pdf">이력서 PDF</a></div>
+        ${links([['포트폴리오 PDF', '/portfolio.pdf'], ['GitHub', 'https://github.com/damisoda']])}
       </div>
-      <nav class="hero-index" aria-label="프로젝트 바로가기">
-        ${projects.map(project => `<a href="${projectPath(project)}"><strong>${text(project.title)}</strong><span>${text(project.feature)}</span></a>`).join('')}
-      </nav>
+      <figure class="hero-portrait">
+        <img src="/assets/daeheum-cho.jpg" alt="조대흠 증명사진" width="413" height="531">
+      </figure>
     </div></section>
     <section id="work" class="shell section work" aria-labelledby="work-title">
-      <h2 id="work-title">프로젝트</h2>
+      <h2 id="work-title">대표 프로젝트</h2>
       <div class="work-list">${projects.map(workEntry).join('')}</div>
     </section>
     <section id="activity" class="shell section" aria-labelledby="activity-title">
-      <h2 id="activity-title">경력과 활동</h2>
+      <h2 id="activity-title">경력</h2>
       <article class="experience">
-        <div><h3>샤이닝라이언 인턴</h3><p class="minor">2026.03.09 - 2026.04.03</p></div>
-        <div><p>LearnCraft에서 강의 녹음 텍스트를 바탕으로 퀴즈를 만드는 기능을 맡았습니다. 난이도 3단계에 맞춰 문항 스타일 5종을 배분하고, JSON 파싱이나 Pydantic 검증이 실패하면 오류를 전달해 한 번 교정하도록 했습니다. Python과 SQL 답안은 Judge0로 실행해 기대 출력과 비교했습니다.</p>
-        ${links([
-          ['프로젝트 코드', 'https://github.com/LearnCraftOrg/LearnCraft'],
-          ['생성 개선 #3', 'https://github.com/LearnCraftOrg/LearnCraft/pull/3'],
-          ['실행 채점 #10', 'https://github.com/LearnCraftOrg/LearnCraft/pull/10'],
-        ])}</div>
+        <div class="experience-meta"><p class="minor">2026.03.09 - 2026.04.03</p><h3>샤이닝라이언</h3><p class="minor">멋쟁이사자처럼 로켓단 인턴십</p></div>
+        <div class="experience-body">
+          <h3>LearnCraft 퀴즈 생성과 실행 채점</h3>
+          <p>강의 녹음 텍스트를 바탕으로 퀴즈를 만드는 기능을 맡았습니다.</p>
+          <ul class="experience-work">
+            <li>난이도 3단계에 맞춰 문항 스타일 5종을 배분했습니다.</li>
+            <li>JSON 파싱이나 Pydantic 검증이 실패하면 오류 내용을 전달해 한 번 교정하도록 했습니다.</li>
+            <li>Python과 SQL 답안을 Judge0로 실행해 기대 출력과 비교했습니다.</li>
+          </ul>
+          ${links([
+            ['프로젝트 코드', 'https://github.com/LearnCraftOrg/LearnCraft'],
+            ['생성 개선 #3', 'https://github.com/LearnCraftOrg/LearnCraft/pull/3'],
+            ['실행 채점 #10', 'https://github.com/LearnCraftOrg/LearnCraft/pull/10'],
+          ])}
+        </div>
       </article>
-      <div class="experience-list">${experience.map(item => `<article class="experience">
-        <div><h3>${text(item.title)}</h3><p class="minor">${text(item.period)}</p></div>
-        <div><p><strong>${text(item.result)}</strong></p><p>${text(item.description)}</p>${links(item.links)}</div>
-      </article>`).join('')}</div>
-
     </section>
-    <section id="about" class="section profile-band"><div class="shell profile-grid">
-      <div><h2>소개</h2>
-        <p>서강대학교에서 미국문화를 전공하고 인공지능을 연계전공하고 있습니다. 지금은 LLM의 해석을 실행 가능한 규칙으로 옮기고, 계산과 검증을 코드에 맡기는 AI 서비스 흐름을 설계합니다.</p>
-        <p>개발 팀장으로 기획, 디자인 팀원과 협업해 왔습니다. 누구나 AI의 도움을 받을 수 있는 서비스를 만드는 것이 제 목표입니다.</p>
-      </div>
-      <div id="skills"><h3>프로젝트에서 쓴 기술</h3>
-        <dl class="profile-skills">
-          <div><dt>모델과 검색</dt><dd>EXAONE, LoRA, vLLM, Ollama, pgvector</dd></div>
-          <div><dt>서버와 데이터</dt><dd>Python, FastAPI, PostgreSQL, SQLite, Supabase</dd></div>
-          <div><dt>화면과 운영</dt><dd>Next.js, Expo, Docker, pytest</dd></div>
-        </dl>
-      </div>
+    <section id="skills" class="section skills-band" aria-labelledby="skills-title"><div class="shell">
+      <h2 id="skills-title">개발 역량</h2>
+      <div class="skills-grid">${skills.map(([title, summary, stack, evidence]) => `<article class="skill">
+        <h3>${text(title)}</h3><p>${text(summary)}</p><p class="minor">${text(stack)}</p>${links([evidence])}
+      </article>`).join('')}</div>
     </div></section>
-    <div class="shell archive-wrap">
-      <details class="archive">
-        <summary>다른 프로젝트</summary>
-        ${links([
-          ['Paper-Digest', 'https://github.com/damisoda/Paper-Digest'],
-          ['LOVELOP 에이전트 시뮬레이터', 'https://github.com/damisoda/LOVELOP-commercial-agent-simulator'],
-          ['한국어 텍스트 복원', 'https://github.com/damisoda/text-recovery'],
-          ['Paw Patrol Network', 'https://github.com/damisoda/TECH4GOOD_Hackerthon'],
-        ])}
-      </details>
-    </div>
+    <section id="projects" class="shell section more-work" aria-labelledby="more-work-title">
+      <h2 id="more-work-title">다른 프로젝트</h2>
+      <div class="more-grid">${moreProjects.map(([title, summary, href]) => `<article>
+        <h3>${link([title, href])}</h3><p>${text(summary)}</p>
+      </article>`).join('')}</div>
+    </section>
+    <section id="about" class="shell section background" aria-labelledby="about-title">
+      <h2 id="about-title">학력과 활동</h2>
+      <div class="background-grid">
+        <article class="education"><h3>서강대학교</h3><p class="minor">미국문화 전공, 인공지능 연계전공</p>
+          <p>미국문화를 공부하다 AI를 배우기 시작했습니다. 개발 팀장으로 기획, 디자인 팀원과 협업하며 누구나 AI의 도움을 받을 수 있는 서비스를 만들고 있습니다.</p>
+        </article>
+        <div class="activity-list">${background.map(item => `<article class="activity">
+          <p class="minor">${text(item.period)}</p><h3>${text(item.title)}</h3>
+          <p class="activity-result">${text(item.result)}</p><p>${text(item.description)}</p>${links(item.links)}
+        </article>`).join('')}</div>
+      </div>
+    </section>
   </main>`;
 }
 
@@ -231,7 +253,7 @@ function casePage(project, next, demo) {
   const chapters = project.chapters.map(entry => [chapterLabels[entry.id], `#${entry.id}`]);
   return `<main id="main">
     <section class="case-hero" aria-labelledby="case-title"><div class="shell case-hero-inner">
-      <div><a class="case-back" href="/#work">프로젝트 목록</a>
+      <div><a class="case-back" href="/#work">대표 프로젝트로</a>
         <h1 id="case-title">${text(project.title)}</h1><p class="case-lede">${text(project.intro)}</p>
         ${links(project.links)}
       </div>
