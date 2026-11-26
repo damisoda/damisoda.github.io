@@ -144,7 +144,8 @@ body {
   min-height: 44px;
 }
 
-.portfolio-home :is(.activity-type, .activity-date small, .footer-date) {
+.portfolio-home :is(.activity-type, .activity-date small),
+body:has(.portfolio-home) .footer-date {
   font-size: 12px;
 }
 
@@ -155,5 +156,61 @@ body {
 @media (min-width: 1000px) {
   .portfolio-home :is(.work-section, .skills-section, .about-section, .activity-section, .archive-section) {
     padding-bottom: 120px;
+  }
+}
+
+.case-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(24px, 6vw, 88px);
+  align-items: start;
+  padding-block: 26px;
+  margin-block: 42px 64px;
+  border-block: 1px solid var(--line);
+}
+
+.case-overview :is(h2, p, strong, span) {
+  margin: 0;
+}
+
+.case-overview h2,
+.case-overview-result p {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.case-overview div p,
+.case-overview-result span {
+  margin-top: 8px;
+  color: var(--secondary);
+  line-height: 1.65;
+}
+
+.case-overview-result {
+  display: grid;
+  gap: 4px;
+  border-left: 2px solid var(--accent);
+  padding-left: 18px;
+}
+
+.case-overview-result strong {
+  font-size: clamp(27px, 3vw, 38px);
+  letter-spacing: -.03em;
+  line-height: 1.2;
+}
+
+.case-overview-result:hover strong {
+  color: var(--accent);
+}
+
+.case-overview-result:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+
+@media (max-width: 760px) {
+  .case-overview {
+    grid-template-columns: minmax(0, 1fr);
+    margin-block: 32px 48px;
   }
 }

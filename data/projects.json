@@ -148,10 +148,10 @@
     "summary": "보호자의 설명과 시민 제보를 수색 구역 계산에 반영하는 서비스입니다.",
     "stack": [
       "FastAPI",
-      "EXAONE·SAR LoRA",
+      "EXAONE, SAR LoRA",
       "K-EXAONE",
       "vLLM",
-      "H3·도로망",
+      "H3, 도로망",
       "Supabase",
       "Expo"
     ],
@@ -350,7 +350,7 @@
     "stack": [
       "FastAPI",
       "Expo",
-      "Ollama · EXAONE 3.5",
+      "Ollama, EXAONE 3.5",
       "SQLite",
       "pytest"
     ],
@@ -384,7 +384,7 @@
     "metrics": [
       [
         "63.6%",
-        "최종 구성의 성향 판독 정확도"
+        "골든셋 성향 라벨 22개의 판독 정확도"
       ],
       [
         "0건",
@@ -540,7 +540,7 @@
     "stack": [
       "FastAPI",
       "Next.js",
-      "PostgreSQL·pgvector",
+      "PostgreSQL, pgvector",
       "GraphRAG",
       "Claude Haiku",
       "Docker"

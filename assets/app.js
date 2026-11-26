@@ -30,7 +30,7 @@ document.querySelectorAll('.filter').forEach(button => button.addEventListener('
     card.hidden = button.dataset.filter !== '전체' && card.dataset.category !== button.dataset.filter;
     if (!card.hidden) count++;
   });
-  document.querySelector('.work-count').textContent = `${count} project${count === 1 ? '' : 's'}`;
+  document.querySelector('.work-count').textContent = `프로젝트 ${count}개`;
 }));
 document.querySelector('.copy-email')?.addEventListener('click', async event => {
   const status = document.querySelector('.copy-status');
