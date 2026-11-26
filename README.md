@@ -4,7 +4,8 @@ GitHub Pages에서 제공하는 정적 포트폴리오입니다. 프로젝트의
 
 ## 수정
 
-- 프로젝트 내용: `data/projects.json`
+- 대표 프로젝트와 검증 기록: `data/projects.json`
+- 공개 문서: `portfolio.pdf`, `resume.pdf`
 - 페이지 템플릿: `scripts/build.mjs`
 - 스타일·상호작용: `assets/style.css`, `assets/app.js`
 - 이미지: `assets/` — 기존 프로젝트를 실행해 캡처한 화면·시각화·캐릭터

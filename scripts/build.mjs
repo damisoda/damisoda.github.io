@@ -5,8 +5,11 @@ import { dirname, resolve, join } from 'node:path';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const projects = JSON.parse(readFileSync(join(root, 'data/projects.json'), 'utf8'));
+const homeProjects = ['come-back-home', 'dev-hive', 'career-piggybank']
+  .map(slug => projects.find(project => project.slug === slug));
 const activities = JSON.parse(readFileSync(join(root, 'data/activity.json'), 'utf8'));
 const assetVersion = createHash('sha256').update(readFileSync(join(root,'assets/style.css'))).update(readFileSync(join(root,'assets/app.js'))).digest('hex').slice(0,10);
+const homeVersion = createHash('sha256').update(readFileSync(join(root, 'assets/home.css'))).digest('hex').slice(0, 10);
 const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const arrow = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.6"/></svg>';
 const mark = '<svg class="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M8 24V8h16M8 24h16V8" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="8" r="4" fill="currentColor"/><circle cx="24" cy="8" r="4" fill="currentColor"/><circle cx="24" cy="24" r="4" fill="currentColor"/><circle cx="8" cy="24" r="4" fill="currentColor"/></svg>';
@@ -51,36 +54,71 @@ function supplement(p) {
 }
 
 function card(p) {
- return `<article class="project-card" data-project="${esc(p.slug)}" data-category="${esc(p.category)}"><a class="visual-link" href="/projects/${esc(p.slug)}/" aria-label="${esc(p.title)} 프로젝트 자세히 보기">${imagePanel(p)}</a><div class="project-copy"><div class="project-meta"><span>${esc(p.category)}</span><span>${esc(p.kind)}</span><span>${esc(p.period)}</span></div><h3><a href="/projects/${esc(p.slug)}/">${esc(p.title)}${arrow}</a></h3><p>${esc(p.summary)}</p>${p.aiRole?`<p class="ai-role"><strong>AI가 맡은 일</strong> ${esc(p.aiRole)}</p>`:''}${tags(p)}<div class="project-proof">${esc(p.highlight)}</div><div class="card-links"><a class="text-link" href="/projects/${esc(p.slug)}/">프로젝트 보기${arrow}</a>${p.demoUrl?external(p.demoUrl,'데모 체험'): ''}</div></div></article>`;
+  return `<article class="project-card" data-project="${esc(p.slug)}" data-category="${esc(p.category)}">
+    <div class="project-copy">
+      <h3><a href="/projects/${esc(p.slug)}/">${esc(p.title)}</a></h3>
+      <p class="home-project-role">${esc(p.kind)}, ${esc(p.period)}</p>
+      <p>${esc(p.summary)}</p>
+      <div class="card-links">
+        <a class="text-link" href="/projects/${esc(p.slug)}/">구현과 검증 기록</a>
+        ${p.demoUrl ? external(p.demoUrl, '예제 데모') : external(p.repo, '저장소')}
+      </div>
+    </div>
+    <div class="project-proof"><strong>${esc(p.metrics[0][0])}</strong><span>${esc(p.metrics[0][1])}</span></div>
+  </article>`;
 }
 
 function frame(title, description, path, content) {
- return `<!doctype html><html lang="ko" data-theme="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="https://damisoda.github.io${path}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="website"><meta property="og:url" content="https://damisoda.github.io${path}"><meta name="twitter:card" content="summary"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><script>try{const t=localStorage.getItem('portfolio-theme');if(t==='dark')document.documentElement.dataset.theme='dark'}catch{}</script><link rel="stylesheet" href="/assets/style.css?v=${assetVersion}"><script src="/assets/app.js?v=${assetVersion}" defer></script></head><body>${header()}${content}${footer()}</body></html>`;
+ return `<!doctype html><html lang="ko" data-theme="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="https://damisoda.github.io${path}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="website"><meta property="og:url" content="https://damisoda.github.io${path}"><meta name="twitter:card" content="summary"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><script>try{const t=localStorage.getItem('portfolio-theme');if(t==='dark')document.documentElement.dataset.theme='dark'}catch{}</script><link rel="stylesheet" href="/assets/style.css?v=${assetVersion}">${path === '/' ? `<link rel="stylesheet" href="/assets/home.css?v=${homeVersion}">` : ''}<script src="/assets/app.js?v=${assetVersion}" defer></script></head><body>${header()}${content}${footer()}</body></html>`;
 }
 
-const intro = `<section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><p class="intro-name">안녕하세요, 조대흠입니다.</p><h1 id="hero-title">언어에서 AI로,<br>배우며 만듭니다<span class="title-dot">.</span></h1><p class="hero-description">언어와 AI에 대한 관심에서 출발해<br class="desktop-break"> 사람이 쓰는 AI 서비스를 만들고 싶습니다.<br>AI와 함께 만들고, 고치고, 다시 확인하며 배웁니다.</p><div class="hero-actions"><a class="button primary" href="#work">프로젝트 살펴보기<span aria-hidden="true">↓</span></a>${external('https://github.com/damisoda','GitHub에서 보기')}</div><p class="education">서강대학교 미국문화 전공 · 인공지능 연계전공</p></div><div class="hero-work"><div class="hero-preview-heading"><span class="live-dot" aria-hidden="true"></span><span>최근 작업</span><span>dqa / 2026.10</span></div><a href="/projects/design-qa-agent/" class="hero-demo"><img src="/assets/dqa-demo.png" alt="dqa 실제 실행: Figma와 수정 전후 화면, 코드 diff를 함께 비교" width="960" height="540" fetchpriority="high"></a><div class="preview-bottom"><span>디자인 검수부터 코드 수정까지</span><a href="/projects/design-qa-agent/" aria-label="dqa 작업 과정 보기">${arrow}</a></div><div class="mini-process" aria-label="dqa 실행 과정"><span>측정</span><i></i><span>수정</span><i></i><span>재검증</span></div></div></section>`;
-const work = `<section id="work" class="work-section" aria-labelledby="work-title"><div class="section-heading"><div><h2 id="work-title">대표 프로젝트</h2><p>어떤 문제를 다뤘고, 무엇을 확인했는지.</p></div><span class="work-count" aria-live="polite">4 projects</span></div><div class="filters" role="group" aria-label="프로젝트 분류">${['전체','AI 에이전트','AI 서비스','데이터·추천'].map((x,i)=>`<button class="filter ${i===0?'active':''}" aria-pressed="${i===0}" data-filter="${esc(x)}">${esc(x)}</button>`).join('')}</div><div class="project-grid">${projects.map(card).join('')}</div></section>`;
-const about = `<section id="about" class="about-section" aria-labelledby="about-title"><div class="about-intro"><h2 id="about-title">언어에서 시작해,<br>서비스를 만드는 일로.</h2><p>미국문화를 전공하며 언어에 관심을 가졌고,<br>텍스트 복원과 NLP를 거쳐 AI 서비스 개발로<br class="desktop-break"> 관심을 넓혀왔습니다.</p><p>AI 코딩 도구를 활용해 프로젝트를 진행하며,<br>설계 선택과 실행·평가 결과를 문서로 남기고 있습니다.</p><a class="text-link" href="mailto:jodaeheum800@gmail.com">함께 이야기하기${arrow}</a></div><div class="about-details"><div class="practice"><h3>프로젝트에서 고민하는 것</h3><div><h4>모델이 맡을 일 정하기</h4><p>해석은 모델에, 검증 가능한 계산과 제약은 코드에 맡깁니다.</p></div><div><h4>실패한 다음까지 연결하기</h4><p>폴백, 사용자 안내, 승인과 기록을 서비스 흐름 안에서 다룹니다.</p></div><div><h4>AI 판단을 어디까지 믿을지 정하기</h4><p>합성 데이터로 정한 값은 합성 데이터의 결과로만 말하고, 모델의 해석이 틀릴 때를 대비한 독립 경로와 기권을 둡니다. <a class="inline-link" href="/projects/come-back-home/#reflection">돌아오길에서의 고민</a></p></div><div><h4>결과를 다시 확인하기</h4><p>테스트·골든셋·브라우저 측정으로 확인하고, 평가 범위와 한계를 함께 적습니다.</p></div></div></div></section>`;
+const intro = `<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <h1 id="hero-title">조대흠, AI 엔지니어</h1>
+    <p class="hero-description">LLM의 해석을 서비스에 적용하고, 그 결과가 근거에 맞게 실행되는지 확인합니다.</p>
+    <div class="hero-actions">
+      <a class="button primary" href="/portfolio.pdf">포트폴리오 PDF</a>
+      <a class="button secondary" href="/resume.pdf">이력서 PDF</a>
+    </div>
+    <p class="education">서강대학교 미국문화 전공, 인공지능 연계전공</p>
+  </div>
+  <section class="home-evidence" aria-labelledby="home-evidence-title">
+    <h2 id="home-evidence-title">구현과 검증 사례</h2>
+    <ul>
+      <li><a href="/projects/come-back-home/#validation"><strong>돌아오길</strong><span>보행 규칙 검증, 평가기 수정</span></a></li>
+      <li><a href="/projects/dev-hive/#validation"><strong>Dev-Hive</strong><span>2패스 편입, 동적 임계값</span></a></li>
+      <li><a href="/projects/career-piggybank/#validation"><strong>커리어 저금통</strong><span>성향 판독의 근거 검사</span></a></li>
+    </ul>
+  </section>
+</section>`;
+const categories = ['전체', ...new Set(homeProjects.map(project => project.category))];
+const work = `<section id="work" class="work-section" aria-labelledby="work-title">
+  <div class="section-heading"><h2 id="work-title">대표 프로젝트</h2><span class="work-count" aria-live="polite">${homeProjects.length} projects</span></div>
+  <div class="filters" role="group" aria-label="프로젝트 분류">${categories.map((name, index) => `<button class="filter ${index === 0 ? 'active' : ''}" aria-pressed="${index === 0}" data-filter="${esc(name)}">${esc(name)}</button>`).join('')}</div>
+  <div class="project-grid">${homeProjects.map(card).join('')}</div>
+</section>`;
+const about = `<section id="about" class="about-section" aria-labelledby="about-title"><div class="about-intro"><h2 id="about-title">언어에서 시작해,<br>서비스를 만드는 일로.</h2><p>미국문화를 전공하며 언어에 관심을 가졌고,<br>텍스트 복원과 NLP를 거쳐 AI 서비스 개발로<br class="desktop-break"> 관심을 넓혀왔습니다.</p><p>모델 결과에 어떤 근거가 있는지, 실제 서비스에서 어떻게 쓰이는지 확인하며 개발합니다.</p><a class="text-link" href="mailto:jodaeheum800@gmail.com">함께 이야기하기${arrow}</a></div><div class="about-details"><div class="practice"><h3>프로젝트에서 고민하는 것</h3><div><h4>모델이 맡을 일 정하기</h4><p>해석은 모델에, 검증 가능한 계산과 제약은 코드에 맡깁니다.</p></div><div><h4>실패한 다음까지 연결하기</h4><p>폴백, 사용자 안내, 승인과 기록을 서비스 흐름 안에서 다룹니다.</p></div><div><h4>AI 판단을 어디까지 믿을지 정하기</h4><p>합성 데이터로 정한 값은 합성 데이터의 결과로만 말하고, 모델의 해석이 틀릴 때를 대비한 독립 경로와 기권을 둡니다. <a class="inline-link" href="/projects/come-back-home/#reflection">돌아오길에서의 고민</a></p></div><div><h4>결과를 다시 확인하기</h4><p>테스트, 골든셋, 브라우저 측정으로 확인하고, 평가 범위와 한계를 함께 적습니다.</p></div></div></div></section>`;
 const activity = `<section id="activity" class="activity-section" aria-labelledby="activity-title"><div class="section-heading"><div><h2 id="activity-title">활동과 성과</h2><p>함께 배우고, 프로젝트로 연결한 경험.</p></div></div><div class="activity-list">${activities.map(item=>`<article class="activity-item"><div class="activity-date">${esc(item.period)}${item.periodNote?`<small>${esc(item.periodNote)}</small>`:''}</div><div class="activity-content"><span class="activity-type">${esc(item.type)}</span><h3>${esc(item.title)}</h3><p>${esc(item.description)}</p><div class="activity-links">${item.links.map(([label,url])=>external(url,label)).join('')}</div></div><span class="activity-result">${esc(item.result)}</span></article>`).join('')}</div></section>`;
-const skillGroups=[
- ['LLM·모델',[['EXAONE LoRA 파인튜닝','돌아오길'],['vLLM 서빙','돌아오길'],['Ollama 로컬 추론','dqa · 커리어 저금통 · Dev-Hive'],['Claude Haiku API','Dev-Hive']]],
- ['에이전트·검색',[['Dify 워크플로·RAG','dqa'],['GraphRAG · pgvector','Dev-Hive'],['안전 게이트·폴백 설계','커리어 저금통 · 돌아오길'],['골든셋 평가','커리어 저금통']]],
- ['백엔드·데이터',[['FastAPI','돌아오길 · 커리어 저금통 · Dev-Hive'],['PostgreSQL · SQLite','Dev-Hive · 커리어 저금통 · 돌아오길'],['Supabase Auth·작업 큐','돌아오길'],['H3 · 도로망 보행 계산','돌아오길']]],
- ['화면·운영·검증',[['Next.js · Expo','Dev-Hive · 커리어 저금통 · 돌아오길'],['Docker · 셀프호스팅','Dev-Hive'],['Chromium 측정·회귀검증','dqa'],['pytest','커리어 저금통 · 돌아오길']]]
+const skillGroups = [
+  ['모델과 평가', [['EXAONE LoRA, vLLM', '돌아오길'], ['Ollama', '커리어 저금통'], ['원응답 재채점', '돌아오길'], ['근거와 방향 검사', '커리어 저금통']]],
+  ['검색과 추천', [['GraphRAG, pgvector', 'Dev-Hive'], ['동적 임계값', 'Dev-Hive'], ['코사인 유사도, 군집화', 'Dev-Hive']]],
+  ['백엔드와 데이터', [['FastAPI', '돌아오길, Dev-Hive, 커리어 저금통'], ['PostgreSQL', 'Dev-Hive'], ['Supabase, SQLite', '돌아오길, 커리어 저금통']]],
+  ['화면과 운영', [['Next.js', 'Dev-Hive'], ['Expo', '돌아오길, 커리어 저금통'], ['Docker, pytest', '팀 프로젝트']]],
 ];
 const skills = `<section id="skills" class="skills-section" aria-labelledby="skills-title"><div class="section-heading"><div><h2 id="skills-title">프로젝트에서 쓴 기술</h2><p>기술마다 실제로 사용한 프로젝트를 함께 적었습니다.</p></div></div><div class="skill-grid">${skillGroups.map(([group,items])=>`<div class="skill-group"><h3>${esc(group)}</h3><ul>${items.map(([name,where])=>`<li><strong>${esc(name)}</strong><span>${esc(where)}</span></li>`).join('')}</ul></div>`).join('')}</div></section>`;
 const archive = `<section class="archive-section" aria-labelledby="archive-title"><div class="section-heading"><h2 id="archive-title">이전에 만든 것들</h2><p>작은 자동화부터 팀 프로젝트까지.</p></div><div class="archive-list">${[
- ['Paper-Digest','논문 수집·로컬 요약·Obsidian 저장·Discord 알림','https://github.com/damisoda/Paper-Digest','개인 프로젝트'],
- ['LearnCraft','강의 스크립트 기반 퀴즈 생성·코드 자동 채점','https://github.com/damisoda/LearnCraft-quiz_generator','인턴십'],
- ['LOVELOP agent simulator','생성형 에이전트 상권 시뮬레이션·비동기 실행','https://github.com/damisoda/LOVELOP-commercial-agent-simulator','팀 프로젝트'],
+ ['Paper-Digest','논문 수집, 로컬 요약, Obsidian 저장, Discord 알림','https://github.com/damisoda/Paper-Digest','개인 프로젝트'],
+ ['LearnCraft','강의 스크립트 기반 퀴즈 생성, 코드 자동 채점','https://github.com/damisoda/LearnCraft-quiz_generator','인턴십'],
+ ['LOVELOP agent simulator','생성형 에이전트 상권 시뮬레이션, 비동기 실행','https://github.com/damisoda/LOVELOP-commercial-agent-simulator','팀 프로젝트'],
  ['text-recovery','자모 분리와 KoBART 기반 한국어 텍스트 복원','https://github.com/damisoda/text-recovery','팀 프로젝트'],
- ['Paw Patrol Network','보도·점자블록 파손 탐지와 민원 문안 생성','https://github.com/damisoda/TECH4GOOD_Hackerthon','해커톤']
+ ['Paw Patrol Network','보도, 점자블록 파손 탐지와 민원 문안 생성','https://github.com/damisoda/TECH4GOOD_Hackerthon','해커톤']
 ].map(([name,desc,url,type])=>`<a class="archive-item" href="${url}" target="_blank" rel="noopener noreferrer"><h3>${esc(name)}</h3><p>${esc(desc)}</p><span>${esc(type)}</span>${arrow}</a>`).join('')}</div></section>`;
 const contact = `<section id="contact" class="contact-section" aria-labelledby="contact-title"><div><p>함께 만들고 싶은 일이 있다면</p><h2 id="contact-title">이야기를 나눠요.</h2></div><div class="contact-links"><a class="contact-email" href="mailto:jodaeheum800@gmail.com">jodaeheum800@gmail.com${arrow}</a><button class="copy-email" data-email="jodaeheum800@gmail.com">이메일 주소 복사</button><span class="copy-status" role="status"></span></div></section>`;
-writeFileSync(join(root,'index.html'),frame('조대흠 · AI 서비스 개발 포트폴리오','모델·데이터·화면을 연결하고 실제 동작을 검증합니다. 조대흠의 AI 서비스·에이전트 프로젝트와 구현·평가 기록.','/',`<main id="main">${intro}${work}${skills}${about}${activity}${archive}${contact}</main>`));
+writeFileSync(join(root,'index.html'),frame('조대흠, AI 엔지니어','돌아오길, Dev-Hive, 커리어 저금통의 구현과 평가 기록.','/',`<main id="main" class="portfolio-home">${intro}${work}${skills}${about}${activity}${archive}${contact}</main>`));
 
-for(const [index,p] of projects.entries()) {
- const next=projects[(index+1)%projects.length];
+for(const p of projects) {
+ const visibleIndex = homeProjects.indexOf(p);
+ const next = homeProjects[(visibleIndex + 1) % homeProjects.length];
  const content = `<main id="main" class="case-page"><a class="back-link" href="/#work"><span aria-hidden="true">←</span> 모든 프로젝트</a><section class="case-intro"><div class="project-meta"><span>${esc(p.kind)}</span><span>${esc(p.period)}</span></div><h1>${esc(p.title)}</h1><p class="case-subtitle">${esc(p.subtitle)}</p>${tags(p)}<div class="case-actions">${p.demoUrl?external(p.demoUrl,'데모 체험','button primary'): ''}${external(p.repo,'GitHub 저장소',p.demoUrl?'button secondary':'button primary')}<span class="case-recognition">${esc(p.highlight)}</span></div></section><figure class="case-figure">${imagePanel(p,{large:true})}<figcaption>${esc(p.imageLabel)}</figcaption></figure>${productTour(p)}<div class="case-body"><aside class="case-toc" aria-label="프로젝트 목차">${p.screens?.length?'<a href="#demo">앱 화면·체험</a>':''}${p.solving?'<a href="#solving">문제 해결</a>':''}${p.operations?'<a href="#operations">운영하며 고친 것</a>':''}${p.reflection?'<a href="#reflection">AI 판단의 한계</a>':''}<a href="#problem">다룬 문제</a><a href="#contribution">참여한 일</a>${p.arch?'<a href="#architecture">시스템 구조</a>':''}<a href="#decisions">구현 선택</a><a href="#validation">검증과 한계</a></aside><div class="case-content">${solving(p)}${operations(p)}${reflection(p)}<section id="problem"><h2>어떤 문제를 다뤘나요?</h2><p>${esc(p.problem)}</p></section><section id="contribution"><h2>어떤 일에 참여했나요?</h2><p>${esc(p.role)}</p></section>${architecture(p)}<section id="decisions"><h2>서비스는 어떻게 동작하나요?</h2><ol class="case-process">${p.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="decision-list">${p.decisions.map(([title,desc])=>`<article><h3>${esc(title)}</h3><p>${esc(desc)}</p></article>`).join('')}</div></section><section id="validation"><h2>무엇을 확인했나요?</h2>${p.metrics.length?`<div class="metrics">${p.metrics.map(([value,label])=>`<div><strong>${esc(value)}</strong><span>${esc(label)}</span></div>`).join('')}</div>`:''}<p>${esc(p.evidence)}</p>${supplement(p)}<div class="scope-note"><h3>확인한 범위와 남은 한계</h3><p>${esc(p.limitations)}</p></div><div class="evidence-links">${p.links.map(([label,url])=>external(url,label)).join('')}</div></section></div></div><a class="next-project" href="/projects/${next.slug}/"><span>다음 프로젝트</span><strong>${esc(next.title)}</strong>${arrow}</a></main>`;
  const dir=join(root,'projects',p.slug);mkdirSync(dir,{recursive:true});
  writeFileSync(join(dir,'index.html'),frame(`${p.title} · 조대흠 포트폴리오`,p.summary,`/projects/${p.slug}/`,content));
